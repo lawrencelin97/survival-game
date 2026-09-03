@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cx1u4sl8lari1"]
 
-[ext_resource type="Script" uid="uid://088qgrm8li0y" path="res://scripts/player/Player.gd" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dfmd14r3dx7c7" path="res://scenes/Player.tscn" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://c7olm5eujmlgc" path="res://scenes/Tree.tscn" id="2_0wfyh"]
 
 [node name="Main" type="Node2D" unique_id=1099592104]
@@ -8,9 +8,8 @@
 [node name="TileMap" type="TileMap" parent="." unique_id=1210764755]
 format = 2
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=2002584894]
-script = ExtResource("1_o5qli")
-metadata/_custom_type_script = "uid://088qgrm8li0y"
+[node name="Player" parent="." unique_id=216167271 instance=ExtResource("1_0wfyh")]
 
 [node name="Tree" parent="." unique_id=31252562 instance=ExtResource("2_0wfyh")]
 position = Vector2(57, -24)
+drop_item = null

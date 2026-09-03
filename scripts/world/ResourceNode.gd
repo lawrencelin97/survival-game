@@ -26,6 +26,7 @@ func _ready() -> void:
 
 func _on_interacted(interactor: Node) -> void:
 	health.take_damage(damage_per_hit)
+	print("hi")
 
 func _on_depleted() -> void:
 	if drop_item:

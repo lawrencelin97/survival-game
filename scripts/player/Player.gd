@@ -31,6 +31,7 @@ func _physics_process(_delta: float) -> void:
 	velocity = input_dir * speed
 	move_and_slide()
 
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		_try_interact()
@@ -43,6 +44,7 @@ func _try_interact() -> void:
 	var nearest: Interactable = null
 	var nearest_dist := INF
 	for area in interaction_area.get_overlapping_areas():
+		print("hi")
 		if area is Interactable:
 			var dist := global_position.distance_squared_to(area.global_position)
 			if dist < nearest_dist:

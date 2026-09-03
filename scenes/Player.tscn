@@ -2,26 +2,31 @@
 
 [ext_resource type="Script" uid="uid://088qgrm8li0y" path="res://scripts/player/Player.gd" id="1_qu4a1"]
 [ext_resource type="Script" uid="uid://136xao86b6ub" path="res://scripts/systems/Inventory.gd" id="2_70d11"]
+[ext_resource type="Texture2D" uid="uid://dvhw8dgnryvd8" path="res://art/player.png" id="2_cw2d6"]
 [ext_resource type="Script" uid="uid://cn6b5dp787u0v" path="res://scripts/components/HealthComponent.gd" id="3_cw2d6"]
 [ext_resource type="Script" uid="uid://b4b3hdleeq2q8" path="res://scripts/components/NeedComponent.gd" id="4_khinc"]
 [ext_resource type="Script" uid="uid://bwhq5h6qoe2fe" path="res://scripts/systems/PlacementManager.gd" id="5_bruh7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6eyey"]
+radius = 6.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d3wef"]
+size = Vector2(50, 50)
 
 [node name="Player" type="CharacterBody2D" unique_id=216167271]
 script = ExtResource("1_qu4a1")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=266097303]
+scale = Vector2(0.23214287, 0.23214287)
+texture = ExtResource("2_cw2d6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=137771709]
+position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_6eyey")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=53953957]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=718081485]
-position = Vector2(0, -19)
 shape = SubResource("RectangleShape2D_d3wef")
 
 [node name="Inventory" type="Node" parent="." unique_id=13585132]
@@ -33,5 +38,7 @@ script = ExtResource("3_cw2d6")
 [node name="HungerNeed" type="Node" parent="." unique_id=349250206]
 script = ExtResource("4_khinc")
 
-[node name="PlacementManager" type="Node" parent="." unique_id=764985005]
+[node name="PlacementManager" type="Node2D" parent="." unique_id=602571324]
 script = ExtResource("5_bruh7")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1005412890]
