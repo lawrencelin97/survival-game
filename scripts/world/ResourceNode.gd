@@ -28,6 +28,14 @@ var _last_interactor: Node
 func _ready() -> void:
 	interactable.interacted.connect(_on_interacted)
 	health.died.connect(_on_depleted)
+	# Register this node's own cell as occupied, regardless of whether it was
+	# hand-placed in the editor or spawned by a generator — that way anything
+	# checking GridManager (building placement, another spawn attempt) sees
+	# an accurate picture without the spawner having to remember to do this.
+	GridManager.occupy(GridManager.world_to_grid(global_position), self)
+
+func _exit_tree() -> void:
+	GridManager.free_cell(GridManager.world_to_grid(global_position))
 
 func _on_interacted(interactor: Node) -> void:
 	_last_interactor = interactor
