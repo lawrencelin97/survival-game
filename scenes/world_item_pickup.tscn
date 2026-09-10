@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dof26f1tff6lm"]
+
+[ext_resource type="Script" uid="uid://dm63pmp3gp1wb" path="res://scripts/world/WorldItemPickup.gd" id="1_5ky31"]
+[ext_resource type="Resource" uid="uid://db6j7nftb3ydg" path="res://resources/wood_log.tres" id="2_6joyk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5ky31"]
+
+[node name="WorldItemPickup" type="Area2D" unique_id=385587856]
+script = ExtResource("1_5ky31")
+item = ExtResource("2_6joyk")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=145501544]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=17114016]
+shape = SubResource("CircleShape2D_5ky31")

@@ -20,8 +20,9 @@ signal interacted(interactor: Node)
 
 func _ready() -> void:
 	add_to_group("interactables")
-	collision_layer = 0
+	collision_layer = 1
 	collision_mask = 0
+	monitoring = false
 	# Interactables don't need to detect anything themselves — the player's
 	# InteractionArea does the detecting. This Area2D just needs to exist
 	# in the tree so the player's overlap check can find it via the group.

@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://db6j7nftb3ydg"]
 
-[ext_resource type="Script" uid="uid://byhixqi3mxvf2" path="res://resources/ItemData.gd" id="1_lmpfu"]
+[ext_resource type="Script" uid="uid://byhixqi3mxvf2" path="res://scripts/resources/ItemData.gd" id="1_lmpfu"]
+[ext_resource type="Texture2D" uid="uid://d3up3bt4rd0e" path="res://art/log.png" id="1_tfs8s"]
 
 [resource]
 script = ExtResource("1_lmpfu")
 id = "wood_log"
 display_name = "Wood Log"
+icon = ExtResource("1_tfs8s")
 metadata/_custom_type_script = "uid://byhixqi3mxvf2"

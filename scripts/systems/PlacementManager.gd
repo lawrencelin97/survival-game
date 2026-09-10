@@ -90,6 +90,6 @@ func _set_ghost_collision_enabled(node: Node, enabled: bool) -> void:
 		node.set_deferred("monitoring", enabled)
 		node.set_deferred("monitorable", enabled)
 		for i in node.get_shape_owners():
-			node.set_shape_owner_disabled(i, not enabled)
+			node.shape_owner_set_disabled(i, not enabled)
 	for child in node.get_children():
 		_set_ghost_collision_enabled(child, enabled)

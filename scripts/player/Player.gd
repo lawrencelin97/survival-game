@@ -19,6 +19,9 @@ class_name Player
 @onready var hunger: NeedComponent = $HungerNeed
 @onready var placement: PlacementManager = $PlacementManager
 
+@export var wall_building: BuildingData  # temporary — assign wall.tres in the Inspector for now
+
+
 func _ready() -> void:
 	# Wire the systems that need each other's references. Doing this here
 	# (rather than each system reaching out to find the player) keeps
@@ -39,12 +42,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		placement.confirm_placement()
 	elif event.is_action_pressed("place_cancel") and placement.is_placing():
 		placement.cancel_placement()
+	elif event.is_action_pressed("build"):
+		if placement.is_placing():
+			placement.cancel_placement()
+		else:
+			placement.start_placement(wall_building)
 
 func _try_interact() -> void:
 	var nearest: Interactable = null
 	var nearest_dist := INF
 	for area in interaction_area.get_overlapping_areas():
-		print("hi")
 		if area is Interactable:
 			var dist := global_position.distance_squared_to(area.global_position)
 			if dist < nearest_dist:
