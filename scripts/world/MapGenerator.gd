@@ -52,7 +52,7 @@ func _spawn_trees() -> void:
 	else:
 		rng.randomize()
 
-	var center := Vector2(map_width_cells / 2.0, map_height_cells / 2.0)
+	var center := Vector2.ZERO
 	var placed := 0
 	var attempts := 0
 	var max_attempts := tree_count * 30  # safety net so a crowded map can't infinite-loop
