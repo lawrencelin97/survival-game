@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c08qy5ulpi0io"]
+
+[ext_resource type="Script" uid="uid://0ar458rt24m8" path="res://scripts/systems/InventorySlot.gd" id="1_a131h"]
+
+[node name="InventorySlot" type="Panel" unique_id=1310757559]
+script = ExtResource("1_a131h")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1230011435]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AmountLabel" type="Label" parent="." unique_id=1946602455]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+horizontal_alignment = 2
+vertical_alignment = 2

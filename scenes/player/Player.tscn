@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cn6b5dp787u0v" path="res://scripts/components/HealthComponent.gd" id="3_cw2d6"]
 [ext_resource type="Script" uid="uid://b4b3hdleeq2q8" path="res://scripts/components/NeedComponent.gd" id="4_khinc"]
 [ext_resource type="Script" uid="uid://bwhq5h6qoe2fe" path="res://scripts/systems/PlacementManager.gd" id="5_bruh7"]
+[ext_resource type="PackedScene" uid="uid://ucfiwddnqwos" path="res://scenes/systems/inventory_ui.tscn" id="8_v42im"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6eyey"]
 radius = 12.0
@@ -44,3 +45,7 @@ script = ExtResource("4_khinc")
 script = ExtResource("5_bruh7")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1005412890]
+
+[node name="InventoryUILayer" type="CanvasLayer" parent="." unique_id=1032238335]
+
+[node name="InventoryUI" parent="InventoryUILayer" unique_id=1319094265 instance=ExtResource("8_v42im")]

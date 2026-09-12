@@ -9,18 +9,20 @@ class_name Player
 #  ├─ Inventory (Node, Inventory.gd)
 #  ├─ HealthComponent (Node, HealthComponent.gd)
 #  ├─ HungerNeed (Node, NeedComponent.gd — set need_name = "hunger")
-#  └─ PlacementManager (Node2D, PlacementManager.gd)
+#  ├─ PlacementManager (Node2D, PlacementManager.gd)
+#  └─ InventoryUILayer (CanvasLayer)
+#       └─ InventoryUI (Control, InventoryUI.gd — full rect, starts hidden)
 
 @export var speed := 120.0
+
+@export var wall_building: BuildingData  # temporary — assign wall.tres in the Inspector for now
 
 @onready var interaction_area: Area2D = $InteractionArea
 @onready var inventory: Inventory = $Inventory
 @onready var health: HealthComponent = $HealthComponent
 @onready var hunger: NeedComponent = $HungerNeed
 @onready var placement: PlacementManager = $PlacementManager
-
-@export var wall_building: BuildingData  # temporary — assign wall.tres in the Inspector for now
-
+@onready var inventory_ui: InventoryUI = $InventoryUILayer/InventoryUI
 
 func _ready() -> void:
 	# Wire the systems that need each other's references. Doing this here
@@ -28,6 +30,7 @@ func _ready() -> void:
 	# Inventory/PlacementManager reusable for non-player entities later.
 	placement.inventory = inventory
 	hunger.depleted.connect(_on_hunger_depleted)
+	inventory_ui.open_for(inventory)
 
 func _physics_process(_delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -47,6 +50,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			placement.cancel_placement()
 		else:
 			placement.start_placement(wall_building)
+	elif event.is_action_pressed("toggle_inventory"):
+		inventory_ui.toggle()
 
 func _try_interact() -> void:
 	var nearest: Interactable = null
@@ -70,3 +75,5 @@ func _on_hunger_depleted() -> void:
 #   interact       (e.g. E)
 #   place_confirm  (e.g. Left Click)
 #   place_cancel   (e.g. Right Click / Escape)
+#   build_wall     (e.g. "1")
+#   toggle_inventory (e.g. "I" or Tab)
