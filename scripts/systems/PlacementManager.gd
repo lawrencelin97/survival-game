@@ -34,6 +34,8 @@ func start_placement(building: BuildingData) -> void:
 
 	_current_building = building
 	_ghost = building.scene.instantiate()
+	if _ghost is PlacedBuilding:
+		_ghost.is_ghost = true  # set before add_child so _ready() sees it and skips GridManager/RoomManager registration
 	_ghost.modulate = valid_color
 	# Ghosts shouldn't collide or run gameplay logic — strip collision if
 	# your PlacedBuilding scenes have any StaticBody2D children.
@@ -73,15 +75,15 @@ func confirm_placement() -> bool:
 	if inventory:
 		inventory.remove_all(_current_building.cost)
 
-	var building_instance: Node2D = _current_building.scene.instantiate()
-	get_tree().current_scene.add_child(building_instance)
+	var building_instance := _current_building.scene.instantiate()
 	building_instance.global_position = GridManager.grid_to_world(top_left_cell)
-	GridManager.occupy_multi(cells, building_instance)
+	GridManager.occupy_multi(cells, building_instance)  # register BEFORE add_child, so RoomManager sees this wall during its own _ready()
+	get_tree().current_scene.add_child(building_instance)
 
 	var placed := _current_building
-	_ghost.queue_free()
-	_ghost = null
-	_current_building = null
+	#_ghost.queue_free()
+	#_ghost = null
+	#_current_building = null
 	placement_confirmed.emit(placed, top_left_cell)
 	return true
 

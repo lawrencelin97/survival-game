@@ -37,7 +37,7 @@ func are_cells_free(cells: Array[Vector2i]) -> bool:
 
 func occupy(cell: Vector2i, node: Node) -> void:
 	_occupied[cell] = node
-
+	
 
 func occupy_multi(cells: Array[Vector2i], node: Node) -> void:
 	for cell in cells:
@@ -55,6 +55,10 @@ func free_multi(cells: Array[Vector2i]) -> void:
 
 func get_occupant(cell: Vector2i) -> Node:
 	return _occupied.get(cell, null)
+
+
+func get_occupied_cells() -> Array:
+	return _occupied.keys()
 
 
 # Given a top-left cell and a footprint size (in cells), returns every cell

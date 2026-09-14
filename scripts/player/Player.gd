@@ -10,12 +10,12 @@ class_name Player
 #  ├─ HealthComponent (Node, HealthComponent.gd)
 #  ├─ HungerNeed (Node, NeedComponent.gd — set need_name = "hunger")
 #  ├─ PlacementManager (Node2D, PlacementManager.gd)
-#  └─ InventoryUILayer (CanvasLayer)
-#       └─ InventoryUI (Control, InventoryUI.gd — full rect, starts hidden)
+#  ├─ InventoryUILayer (CanvasLayer)
+#  │    └─ InventoryUI (Control, InventoryUI.gd — full rect, starts hidden)
+#  └─ BuildMenuUILayer (CanvasLayer)
+#       └─ BuildMenuUI (Control, BuildMenuUI.gd — full rect, starts hidden)
 
 @export var speed := 120.0
-
-@export var wall_building: BuildingData  # temporary — assign wall.tres in the Inspector for now
 
 @onready var interaction_area: Area2D = $InteractionArea
 @onready var inventory: Inventory = $Inventory
@@ -23,6 +23,7 @@ class_name Player
 @onready var hunger: NeedComponent = $HungerNeed
 @onready var placement: PlacementManager = $PlacementManager
 @onready var inventory_ui: InventoryUI = $InventoryUILayer/InventoryUI
+@onready var build_menu_ui: BuildMenuUI = $BuildMenuUILayer/BuildMenuUI
 
 func _ready() -> void:
 	# Wire the systems that need each other's references. Doing this here
@@ -31,25 +32,22 @@ func _ready() -> void:
 	placement.inventory = inventory
 	hunger.depleted.connect(_on_hunger_depleted)
 	inventory_ui.open_for(inventory)
+	build_menu_ui.set_context(placement, inventory)
 
 func _physics_process(_delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_dir * speed
 	move_and_slide()
 
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		_try_interact()
 	elif event.is_action_pressed("place_confirm") and placement.is_placing():
 		placement.confirm_placement()
-	elif event.is_action_pressed("place_cancel") and placement.is_placing():
-		placement.cancel_placement()
+	elif event.is_action_pressed("place_cancel") and build_menu_ui.visible:
+		build_menu_ui.close()
 	elif event.is_action_pressed("build"):
-		if placement.is_placing():
-			placement.cancel_placement()
-		else:
-			placement.start_placement(wall_building)
+		build_menu_ui.toggle()
 	elif event.is_action_pressed("toggle_inventory"):
 		inventory_ui.toggle()
 
@@ -75,5 +73,5 @@ func _on_hunger_depleted() -> void:
 #   interact       (e.g. E)
 #   place_confirm  (e.g. Left Click)
 #   place_cancel   (e.g. Right Click / Escape)
-#   build_wall     (e.g. "1")
+#   build            (e.g. "1" or "B" — opens/closes the build menu)
 #   toggle_inventory (e.g. "I" or Tab)

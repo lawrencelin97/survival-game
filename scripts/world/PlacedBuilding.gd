@@ -8,11 +8,23 @@ class_name PlacedBuilding
 
 @export var footprint := Vector2i(1, 1)
 @export var health: HealthComponent  # optional — assign in scene if buildings can be destroyed
+@export var is_room_boundary := false  # true for walls/doors — RoomManager treats these cells as enclosing edges
+@export var is_ghost := false  # true only for PlacementManager's preview instance — skips all real side effects below
 
 func get_occupied_cells() -> Array[Vector2i]:
 	var top_left := GridManager.world_to_grid(global_position)
 	return GridManager.get_footprint_cells(top_left, footprint)
 
+func _ready() -> void:
+	if is_ghost:
+		return
+	if is_room_boundary:
+		RoomManager.request_recalculate()
+
 func _exit_tree() -> void:
+	if is_ghost:
+		return
 	# Keep the grid clean if a building is destroyed/removed at runtime.
 	GridManager.free_multi(get_occupied_cells())
+	if is_room_boundary:
+		RoomManager.request_recalculate()

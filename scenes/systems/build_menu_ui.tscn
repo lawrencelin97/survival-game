@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://b0yjr5p743r61"]
+
+[ext_resource type="Script" uid="uid://idold8q2ioys" path="res://scripts/systems/BuildMenuUI.gd" id="1_s0kr8"]
+[ext_resource type="PackedScene" uid="uid://bf0yprdkwnt4o" path="res://scenes/systems/build_option_slot.tscn" id="2_1ds4e"]
+[ext_resource type="Script" uid="uid://cekdvonujs1ki" path="res://scripts/resources/BuildingData.gd" id="3_yi5sy"]
+[ext_resource type="Resource" uid="uid://b8x0bjl45q1yo" path="res://resources/wall.tres" id="4_ihckq"]
+
+[node name="BuildMenuUi" type="Control" unique_id=1779208186]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 86.0
+offset_top = 594.0
+offset_right = 86.0
+offset_bottom = 594.0
+script = ExtResource("1_s0kr8")
+slot_scene = ExtResource("2_1ds4e")
+available_buildings = Array[ExtResource("3_yi5sy")]([ExtResource("4_ihckq")])
+
+[node name="Panel" type="Panel" parent="." unique_id=502670496]
+layout_mode = 0
+offset_left = 49.0
+offset_top = -81.0
+offset_right = 927.0
+offset_bottom = 28.0
+
+[node name="GridContainer" type="GridContainer" parent="Panel" unique_id=128847425]
+layout_mode = 0
+offset_right = 878.0
+offset_bottom = 111.0
+columns = 5

@@ -1,11 +1,15 @@
 [gd_scene format=3 uid="uid://byk1imfdajomp"]
 
+[ext_resource type="Script" uid="uid://dv0gs7a0j6whf" path="res://scripts/world/PlacedBuilding.gd" id="1_gnurj"]
 [ext_resource type="Texture2D" uid="uid://w53pco5kcq3a" path="res://art/wall.png" id="1_wykyb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ktk7"]
 size = Vector2(32, 32)
 
-[node name="Wall" type="StaticBody2D" unique_id=1532647812]
+[node name="Wall" type="StaticBody2D" unique_id=840592439]
+script = ExtResource("1_gnurj")
+is_room_boundary = true
+metadata/_custom_type_script = "uid://dv0gs7a0j6whf"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1515773223]
 texture = ExtResource("1_wykyb")

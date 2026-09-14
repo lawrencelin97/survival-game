@@ -15,6 +15,8 @@ radius = 32.01562
 [node name="Tree" type="StaticBody2D" unique_id=31252562]
 script = ExtResource("1_874r4")
 drop_item = ExtResource("2_1gtcl")
+drop_amount_min = 8
+drop_amount_max = 10
 pickup_scene = ExtResource("3_2i8fu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1313693617]

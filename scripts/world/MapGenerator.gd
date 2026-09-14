@@ -70,8 +70,8 @@ func _spawn_trees() -> void:
 			continue  # something (another tree) is already here
 
 		var tree := tree_scene.instantiate()
-		add_child(tree)
 		tree.global_position = GridManager.grid_to_world(cell)
+		add_child(tree)
 		# No need to call GridManager.occupy() here — ResourceNode registers
 		# its own cell in _ready() as soon as it's added to the tree above.
 		placed += 1

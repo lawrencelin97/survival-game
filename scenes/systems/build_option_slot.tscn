@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bf0yprdkwnt4o"]
+
+[ext_resource type="Script" uid="uid://0d4cw070lfv" path="res://scripts/systems/BuildOptionSlot.gd" id="1_7jn47"]
+
+[node name="BuildOptionSlot" type="Button" unique_id=1162069020]
+script = ExtResource("1_7jn47")
