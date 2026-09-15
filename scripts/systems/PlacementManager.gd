@@ -81,9 +81,7 @@ func confirm_placement() -> bool:
 	get_tree().current_scene.add_child(building_instance)
 
 	var placed := _current_building
-	#_ghost.queue_free()
-	#_ghost = null
-	#_current_building = null
+
 	placement_confirmed.emit(placed, top_left_cell)
 	return true
 

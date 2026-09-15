@@ -71,4 +71,3 @@ func _on_building_selected(building: BuildingData) -> void:
 	if placement == null:
 		return
 	placement.start_placement(building)
-	#visible = false

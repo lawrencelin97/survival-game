@@ -63,16 +63,26 @@ func _recalculate() -> void:
 		if visited.has(seed):
 			continue
 		var room := _flood_fill(seed, wall_cells, visited)
-		if room:
+		# Sealing off the interior isn't enough on its own — see
+		# _has_fully_connected_boundary for why this second check exists.
+		if room and _has_fully_connected_boundary(room, wall_cells):
 			rooms.append(room)
 
 	rooms_changed.emit()
 	print("RoomManager: %d room(s) detected" % rooms.size())  # temporary — replace with a visual overlay later
 
 
+func _has_fully_connected_boundary(room: Room, wall_cells: Dictionary) -> bool:
+	for cell in room.cells:
+		for neighbor in _get_neighbors_8(cell):
+			if not room.cells.has(neighbor) and not wall_cells.has(neighbor):
+				return false
+	return true
+
+
+
 func _get_wall_cells() -> Dictionary:
 	var walls: Dictionary = {}
-	var x = 0
 	for cell in GridManager.get_occupied_cells():
 		var occupant := GridManager.get_occupant(cell)
 		if occupant is PlacedBuilding and occupant.is_room_boundary:
@@ -114,3 +124,13 @@ func _flood_fill(start: Vector2i, wall_cells: Dictionary, visited: Dictionary) -
 
 func _get_neighbors(cell: Vector2i) -> Array[Vector2i]:
 	return [cell + Vector2i.UP, cell + Vector2i.DOWN, cell + Vector2i.LEFT, cell + Vector2i.RIGHT]
+
+
+func _get_neighbors_8(cell: Vector2i) -> Array[Vector2i]:
+	var neighbors := _get_neighbors(cell)
+	var diagonals: Array[Vector2i] = [
+		cell + Vector2i(1, 1), cell + Vector2i(1, -1),
+		cell + Vector2i(-1, 1), cell + Vector2i(-1, -1),
+	]
+	neighbors.append_array(diagonals)
+	return neighbors
