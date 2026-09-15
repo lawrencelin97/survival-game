@@ -19,6 +19,10 @@ func _ready() -> void:
 	if is_ghost:
 		return
 	if is_room_boundary:
+		# Registering directly here (rather than RoomManager rescanning
+		# GridManager's full occupant list) keeps room recalculation cost
+		# tied to wall count, not total map object count.
+		RoomManager.register_wall_cells(get_occupied_cells())
 		RoomManager.request_recalculate()
 
 func _exit_tree() -> void:
@@ -27,4 +31,5 @@ func _exit_tree() -> void:
 	# Keep the grid clean if a building is destroyed/removed at runtime.
 	GridManager.free_multi(get_occupied_cells())
 	if is_room_boundary:
+		RoomManager.unregister_wall_cells(get_occupied_cells())
 		RoomManager.request_recalculate()
