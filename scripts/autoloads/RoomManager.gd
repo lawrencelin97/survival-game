@@ -71,14 +71,13 @@ func _recalculate() -> void:
 	rooms_changed.emit()
 	print("RoomManager: %d room(s) detected" % rooms.size())  # temporary — replace with a visual overlay later
 
-
+#Checks that the walls are connected cardinally
 func _has_fully_connected_boundary(room: Room, wall_cells: Dictionary) -> bool:
 	for cell in room.cells:
 		for neighbor in _get_neighbors_8(cell):
 			if not room.cells.has(neighbor) and not wall_cells.has(neighbor):
 				return false
 	return true
-
 
 
 func _get_wall_cells() -> Dictionary:
