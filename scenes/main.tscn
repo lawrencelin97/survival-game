@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://dahw6vqik3h1h" path="res://scripts/world/MapGenerator.gd" id="1_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://wayofehg0x2t" path="res://art/basic tiles.png" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c7olm5eujmlgc" path="res://scenes/resource nodes/Tree.tscn" id="2_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://c24xoxleeffjr" path="res://art/room tiles.png" id="4_tefeu"]
+[ext_resource type="Script" uid="uid://cl7wdium70swv" path="res://scripts/world/RoomFloorLayer.gd" id="5_o6xl0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jyhfs"]
 texture = ExtResource("1_sugp2")
@@ -16,6 +18,18 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_tbgi4"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_jyhfs")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tipki"]
+texture = ExtResource("4_tefeu")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_85g3d"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_tipki")
 
 [node name="Main" type="Node2D" unique_id=1099592104]
 
@@ -30,5 +44,8 @@ z_index = -10
 use_parent_material = true
 tile_set = SubResource("TileSet_tbgi4")
 
+[node name="RoomFloorLayer" type="TileMapLayer" parent="." unique_id=1417796]
+tile_set = SubResource("TileSet_85g3d")
+script = ExtResource("5_o6xl0")
+
 [node name="Player" parent="." unique_id=216167271 instance=ExtResource("1_0wfyh")]
-speed = null

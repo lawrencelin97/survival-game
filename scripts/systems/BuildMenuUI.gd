@@ -3,6 +3,7 @@ class_name BuildMenuUI
 # Scene structure:
 # BuildMenuUI (Control, this script — full rect, starts hidden)
 #  └─ Panel
+#       ├─ DemolishButton (Button, hand-placed — not part of the auto-populated grid below)
 #       └─ GridContainer (Columns = 5, same layout idea as InventoryUI)
 #            (BuildOptionSlot instances added here at runtime)
 #
@@ -19,6 +20,7 @@ class_name BuildMenuUI
 @export var available_buildings: Array[BuildingData] = []
 
 @onready var grid: GridContainer = $Panel/GridContainer
+@onready var demolish_button: Button = $Panel/DemolishButton
 
 var placement: PlacementManager
 var inventory: Inventory
@@ -27,6 +29,7 @@ var _slot_nodes: Array[BuildOptionSlot] = []
 func _ready() -> void:
 	visible = false
 	_build_slots()
+	demolish_button.pressed.connect(_on_demolish_pressed)
 
 func _build_slots() -> void:
 	for child in grid.get_children():
@@ -57,8 +60,8 @@ func toggle() -> void:
 		close()
 
 func close() -> void:
-	visible=false
-	placement.cancel_placement()
+	visible = false
+	placement.cancel_all()  # stop whichever mode (placing or demolishing) was active
 
 func _refresh_affordability() -> void:
 	for i in available_buildings.size():
@@ -71,3 +74,7 @@ func _on_building_selected(building: BuildingData) -> void:
 	if placement == null:
 		return
 	placement.start_placement(building)
+
+func _on_demolish_pressed() -> void:
+	if placement:
+		placement.start_demolish()

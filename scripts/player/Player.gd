@@ -42,8 +42,11 @@ func _physics_process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		_try_interact()
-	elif event.is_action_pressed("place_confirm") and placement.is_placing():
-		placement.confirm_placement()
+	elif event.is_action_pressed("place_confirm") and placement.is_active():
+		if placement.is_placing():
+			placement.confirm_placement()
+		else:
+			placement.confirm_demolish()
 	elif event.is_action_pressed("place_cancel") and build_menu_ui.visible:
 		build_menu_ui.close()
 	elif event.is_action_pressed("build"):

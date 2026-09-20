@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cekdvonujs1ki" path="res://scripts/resources/BuildingData.gd" id="3_yi5sy"]
 [ext_resource type="Resource" uid="uid://b8x0bjl45q1yo" path="res://resources/wall_t1.tres" id="4_ihckq"]
 [ext_resource type="Resource" uid="uid://0sn6hraedtk7" path="res://resources/door_t1.tres" id="5_ihckq"]
+[ext_resource type="Texture2D" uid="uid://c0mjnkrsfjd85" path="res://art/disassemble.png" id="6_7twb0"]
 
 [node name="BuildMenuUi" type="Control" unique_id=1779208186]
 layout_mode = 3
@@ -29,3 +30,11 @@ layout_mode = 0
 offset_right = 878.0
 offset_bottom = 111.0
 columns = 5
+
+[node name="DemolishButton" type="Button" parent="Panel" unique_id=1463483536]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 66.0
+offset_right = 44.0
+offset_bottom = 106.0
+icon = ExtResource("6_7twb0")
