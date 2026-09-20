@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cwo70afi5q51w"]
+
+[ext_resource type="Script" uid="uid://dv0gs7a0j6whf" path="res://scripts/world/PlacedBuilding.gd" id="1_a43nl"]
+[ext_resource type="Texture2D" uid="uid://cmrske7vwrnnx" path="res://art/door.png" id="2_a43nl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2ktk7"]
+size = Vector2(32, 9)
+
+[node name="Door_t1" type="StaticBody2D" unique_id=840592439]
+collision_layer = 0
+script = ExtResource("1_a43nl")
+is_room_boundary = true
+metadata/_custom_type_script = "uid://dv0gs7a0j6whf"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1515773223]
+texture = ExtResource("2_a43nl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=338958130]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_2ktk7")
