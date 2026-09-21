@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cm5jcq5tnd3py"]
+
+[ext_resource type="Script" uid="uid://bxwy8gn0aqa60" path="res://scripts/world/ResourceNode.gd" id="1_f0g4s"]
+[ext_resource type="Resource" uid="uid://comhmhco42syj" path="res://resources/wood_stick.tres" id="2_f0g4s"]
+[ext_resource type="PackedScene" uid="uid://dof26f1tff6lm" path="res://scenes/world_item_pickup.tscn" id="3_jgp3t"]
+[ext_resource type="Texture2D" uid="uid://b8on1p4j2dp1y" path="res://art/shrub.png" id="4_hj16t"]
+[ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="5_0pgqr"]
+[ext_resource type="Script" uid="uid://cn6b5dp787u0v" path="res://scripts/components/HealthComponent.gd" id="6_jdr0r"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r0kve"]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2i8fu"]
+radius = 32.01562
+
+[node name="Shrub" type="StaticBody2D" unique_id=31252562]
+script = ExtResource("1_f0g4s")
+drop_item = ExtResource("2_f0g4s")
+drop_amount_min = 8
+drop_amount_max = 10
+pickup_scene = ExtResource("3_jgp3t")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1313693617]
+position = Vector2(-0.08441591, -0.3394804)
+scale = Vector2(0.75527596, 0.7552759)
+texture = ExtResource("4_hj16t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1761289141]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_r0kve")
+
+[node name="Interactable" type="Area2D" parent="." unique_id=770215340]
+script = ExtResource("5_0pgqr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable" unique_id=924948773]
+shape = SubResource("CircleShape2D_2i8fu")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1526874589]
+script = ExtResource("6_jdr0r")
+max_health = 1.0

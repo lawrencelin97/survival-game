@@ -23,6 +23,9 @@ class_name MapGenerator
 @export var tree_count := 20
 @export var clear_radius_cells := 3  # keep this many cells around the map center tree-free, for player spawn
 
+@export var shrub_scene: PackedScene
+@export var shrub_count := 20
+
 @export var use_random_seed := false
 @export var seed_value := 0
 
@@ -32,6 +35,7 @@ func _ready() -> void:
 func generate() -> void:
 	_fill_ground()
 	_spawn_trees()
+	_spawn_shrubs()
 
 func _fill_ground() -> void:
 	if not tilemaplayer:
@@ -45,7 +49,7 @@ func _spawn_trees() -> void:
 	if not tree_scene:
 		push_warning("MapGenerator has no tree_scene assigned.")
 		return
-
+	
 	var rng := RandomNumberGenerator.new()
 	if use_random_seed:
 		rng.seed = seed_value
@@ -72,6 +76,41 @@ func _spawn_trees() -> void:
 		var tree := tree_scene.instantiate()
 		tree.global_position = GridManager.grid_to_world(cell)
 		add_child(tree)
+		# No need to call GridManager.occupy() here — ResourceNode registers
+		# its own cell in _ready() as soon as it's added to the tree above.
+		placed += 1
+
+func _spawn_shrubs() -> void:
+	if not shrub_scene:
+		push_warning("MapGenerator has no shrub_scene assigned.")
+		return
+	
+	var rng := RandomNumberGenerator.new()
+	if use_random_seed:
+		rng.seed = seed_value
+	else:
+		rng.randomize()
+
+	var center := Vector2.ZERO
+	var placed := 0
+	var attempts := 0
+	var max_attempts := shrub_count * 30  # safety net so a crowded map can't infinite-loop
+
+	while placed < shrub_count and attempts < max_attempts:
+		attempts += 1
+		var cell := Vector2i(
+			rng.randi_range(-map_width_cells+1, map_width_cells - 1),
+			rng.randi_range(-map_height_cells+1, map_height_cells - 1)
+		)
+
+		if Vector2(cell).distance_to(center) < clear_radius_cells:
+			continue  # keep the player's spawn area clear
+		if not GridManager.is_cell_free(cell):
+			continue  # something (another tree) is already here
+
+		var shrub := shrub_scene.instantiate()
+		shrub.global_position = GridManager.grid_to_world(cell)
+		add_child(shrub)
 		# No need to call GridManager.occupy() here — ResourceNode registers
 		# its own cell in _ready() as soon as it's added to the tree above.
 		placed += 1

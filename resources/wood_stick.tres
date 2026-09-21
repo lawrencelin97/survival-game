@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://comhmhco42syj"]
+
+[ext_resource type="Texture2D" uid="uid://bsjmdm3klq0qq" path="res://art/stick.png" id="1_8unyx"]
+[ext_resource type="Script" uid="uid://byhixqi3mxvf2" path="res://scripts/resources/ItemData.gd" id="2_ne4pj"]
+
+[resource]
+script = ExtResource("2_ne4pj")
+id = "wood_stick"
+display_name = "Wood Stick"
+icon = ExtResource("1_8unyx")
+metadata/_custom_type_script = "uid://byhixqi3mxvf2"
