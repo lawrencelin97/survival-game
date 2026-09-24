@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bwhq5h6qoe2fe" path="res://scripts/systems/PlacementManager.gd" id="5_bruh7"]
 [ext_resource type="PackedScene" uid="uid://b0yjr5p743r61" path="res://scenes/systems/build_menu_ui.tscn" id="8_pn6s4"]
 [ext_resource type="PackedScene" uid="uid://ucfiwddnqwos" path="res://scenes/systems/inventory_ui.tscn" id="8_v42im"]
+[ext_resource type="PackedScene" uid="uid://2q1jvhdqck72" path="res://scenes/systems/crafting_ui.tscn" id="9_pn6s4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6eyey"]
 radius = 12.0
@@ -52,3 +53,7 @@ script = ExtResource("5_bruh7")
 [node name="BuildMenuUILayer" type="CanvasLayer" parent="." unique_id=531323777]
 
 [node name="BuildMenuUI" parent="BuildMenuUILayer" unique_id=630644387 instance=ExtResource("8_pn6s4")]
+
+[node name="CraftingUILayer" type="CanvasLayer" parent="." unique_id=1180468184]
+
+[node name="CraftingUI" parent="CraftingUILayer" unique_id=448518439 instance=ExtResource("9_pn6s4")]

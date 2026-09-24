@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://dv1dhc730ix1t"]
+
+[ext_resource type="Script" uid="uid://d2kol5c4rydaw" path="res://scripts/structures/CraftingStation.gd" id="1_0u6fm"]
+[ext_resource type="Script" uid="uid://br8w0bw3p8cjm" path="res://scripts/resources/RecipeData.gd" id="2_m0qn0"]
+[ext_resource type="Texture2D" uid="uid://8udcnx3alflv" path="res://art/workbench.png" id="2_qrwcf"]
+[ext_resource type="Resource" uid="uid://bflws6viwltor" path="res://resources/recipes/recipe_fiber.tres" id="3_ducwp"]
+[ext_resource type="Resource" uid="uid://bvmupcdkfuwxy" path="res://resources/recipes/recipe_rope.tres" id="4_sp8bk"]
+[ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="5_ducwp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m0qn0"]
+size = Vector2(64, 29)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ducwp"]
+size = Vector2(64, 62)
+
+[node name="Workbench" type="StaticBody2D" unique_id=927509143]
+script = ExtResource("1_0u6fm")
+station_name = "workbench"
+available_recipes = Array[ExtResource("2_m0qn0")]([ExtResource("3_ducwp"), ExtResource("4_sp8bk")])
+footprint = Vector2i(2, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=210917259]
+texture = ExtResource("2_qrwcf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=58345426]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_m0qn0")
+
+[node name="Interactable" type="Area2D" parent="." unique_id=119170460]
+script = ExtResource("5_ducwp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable" unique_id=154342679]
+shape = SubResource("RectangleShape2D_ducwp")

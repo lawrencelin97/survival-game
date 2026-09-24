@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cm5jcq5tnd3py"]
 
 [ext_resource type="Script" uid="uid://bxwy8gn0aqa60" path="res://scripts/world/ResourceNode.gd" id="1_f0g4s"]
-[ext_resource type="Resource" uid="uid://comhmhco42syj" path="res://resources/wood_stick.tres" id="2_f0g4s"]
+[ext_resource type="Resource" uid="uid://comhmhco42syj" path="res://resources/items/wood_stick.tres" id="2_f0g4s"]
 [ext_resource type="PackedScene" uid="uid://dof26f1tff6lm" path="res://scenes/world_item_pickup.tscn" id="3_jgp3t"]
 [ext_resource type="Texture2D" uid="uid://b8on1p4j2dp1y" path="res://art/shrub.png" id="4_hj16t"]
 [ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="5_0pgqr"]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c7olm5eujmlgc"]
 
 [ext_resource type="Script" uid="uid://bxwy8gn0aqa60" path="res://scripts/world/ResourceNode.gd" id="1_874r4"]
-[ext_resource type="Resource" uid="uid://db6j7nftb3ydg" path="res://resources/wood_log.tres" id="2_1gtcl"]
+[ext_resource type="Resource" uid="uid://db6j7nftb3ydg" path="res://resources/items/wood_log.tres" id="2_1gtcl"]
 [ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="2_qvbew"]
 [ext_resource type="Script" uid="uid://cn6b5dp787u0v" path="res://scripts/components/HealthComponent.gd" id="3_1gtcl"]
 [ext_resource type="PackedScene" uid="uid://dof26f1tff6lm" path="res://scenes/world_item_pickup.tscn" id="3_2i8fu"]

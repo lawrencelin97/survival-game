@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BuildingData" format=3 uid="uid://0sn6hraedtk7"]
 
 [ext_resource type="Script" uid="uid://breg5tyhcvbgp" path="res://scripts/resources/ItemStack.gd" id="1_s3027"]
-[ext_resource type="Resource" uid="uid://db6j7nftb3ydg" path="res://resources/wood_log.tres" id="2_je8m3"]
+[ext_resource type="Resource" uid="uid://db6j7nftb3ydg" path="res://resources/items/wood_log.tres" id="2_je8m3"]
 [ext_resource type="Texture2D" uid="uid://cmrske7vwrnnx" path="res://art/door.png" id="3_s3027"]
 [ext_resource type="PackedScene" uid="uid://cwo70afi5q51w" path="res://scenes/structures/door_t1.tscn" id="4_je8m3"]
 [ext_resource type="Script" uid="uid://cekdvonujs1ki" path="res://scripts/resources/BuildingData.gd" id="5_rhbsf"]

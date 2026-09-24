@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bibqtuk4v5wbr"]
+
+[ext_resource type="Script" uid="uid://byhixqi3mxvf2" path="res://scripts/resources/ItemData.gd" id="1_ipnmh"]
+[ext_resource type="Texture2D" uid="uid://gpsrx0qbjirn" path="res://art/rope.png" id="1_und2l"]
+
+[resource]
+script = ExtResource("1_ipnmh")
+id = "item_rope"
+display_name = "rope"
+icon = ExtResource("1_und2l")
+metadata/_custom_type_script = "uid://byhixqi3mxvf2"

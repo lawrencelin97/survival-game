@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bflws6viwltor"]
+
+[ext_resource type="Script" uid="uid://breg5tyhcvbgp" path="res://scripts/resources/ItemStack.gd" id="1_mef0x"]
+[ext_resource type="Resource" uid="uid://comhmhco42syj" path="res://resources/items/wood_stick.tres" id="2_08wrf"]
+[ext_resource type="Script" uid="uid://br8w0bw3p8cjm" path="res://scripts/resources/RecipeData.gd" id="2_i6wn6"]
+[ext_resource type="Resource" uid="uid://b1u1ianf33qvn" path="res://resources/items/fiber.tres" id="3_rfrf8"]
+
+[sub_resource type="Resource" id="Resource_08wrf"]
+script = ExtResource("1_mef0x")
+item = ExtResource("2_08wrf")
+metadata/_custom_type_script = "uid://breg5tyhcvbgp"
+
+[sub_resource type="Resource" id="Resource_eog4c"]
+script = ExtResource("1_mef0x")
+item = ExtResource("3_rfrf8")
+amount = 2
+metadata/_custom_type_script = "uid://breg5tyhcvbgp"
+
+[resource]
+script = ExtResource("2_i6wn6")
+id = "recipe_fiber"
+output = SubResource("Resource_eog4c")
+ingredients = Array[ExtResource("1_mef0x")]([SubResource("Resource_08wrf")])
+required_station = "workbench"
+metadata/_custom_type_script = "uid://br8w0bw3p8cjm"

@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://2q1jvhdqck72"]
+
+[ext_resource type="Script" uid="uid://b2ce042arw3b2" path="res://scripts/systems/CraftingUI.gd" id="1_yqhnx"]
+[ext_resource type="PackedScene" uid="uid://c3a5c8e2noqo3" path="res://scenes/systems/recipe_slot.tscn" id="2_tus6e"]
+
+[node name="CraftingUi" type="Control" unique_id=448518439]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_yqhnx")
+slot_scene = ExtResource("2_tus6e")
+
+[node name="Panel" type="Panel" parent="." unique_id=1271651980]
+layout_mode = 0
+offset_left = 683.0
+offset_top = 38.0
+offset_right = 1094.0
+offset_bottom = 406.0
+
+[node name="TitleLabel" type="Label" parent="Panel" unique_id=838335653]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 9.0
+offset_right = 291.0
+offset_bottom = 32.0
+
+[node name="GridContainer" type="GridContainer" parent="Panel" unique_id=1304691618]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 5

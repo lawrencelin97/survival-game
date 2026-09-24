@@ -12,8 +12,10 @@ class_name Player
 #  ├─ PlacementManager (Node2D, PlacementManager.gd)
 #  ├─ InventoryUILayer (CanvasLayer)
 #  │    └─ InventoryUI (Control, InventoryUI.gd — full rect, starts hidden)
-#  └─ BuildMenuUILayer (CanvasLayer)
-#       └─ BuildMenuUI (Control, BuildMenuUI.gd — full rect, starts hidden)
+#  ├─ BuildMenuUILayer (CanvasLayer)
+#  │    └─ BuildMenuUI (Control, BuildMenuUI.gd — full rect, starts hidden)
+#  └─ CraftingUILayer (CanvasLayer)
+#       └─ CraftingUI (Control, CraftingUI.gd — full rect, starts hidden)
 
 @export var speed := 120.0
 
@@ -24,6 +26,7 @@ class_name Player
 @onready var placement: PlacementManager = $PlacementManager
 @onready var inventory_ui: InventoryUI = $InventoryUILayer/InventoryUI
 @onready var build_menu_ui: BuildMenuUI = $BuildMenuUILayer/BuildMenuUI
+@onready var crafting_ui: CraftingUI = $CraftingUILayer/CraftingUI
 
 func _ready() -> void:
 	# Wire the systems that need each other's references. Doing this here
@@ -47,6 +50,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			placement.confirm_placement()
 		else:
 			placement.confirm_demolish()
+	elif event.is_action_pressed("place_cancel") and crafting_ui.visible:
+		crafting_ui.close()
 	elif event.is_action_pressed("place_cancel") and build_menu_ui.visible:
 		build_menu_ui.close()
 	elif event.is_action_pressed("build"):
@@ -65,6 +70,11 @@ func _try_interact() -> void:
 				nearest = area
 	if nearest:
 		nearest.interact(self)
+
+# Called by CraftingStation._on_interacted() when the player interacts
+# with any crafting bench.
+func open_crafting_menu(station: CraftingStation) -> void:
+	crafting_ui.open_for(station, inventory)
 
 func _on_hunger_depleted() -> void:
 	# Placeholder for RimWorld-style "starving" consequences. For now, just

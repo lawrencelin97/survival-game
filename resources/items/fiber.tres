@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b1u1ianf33qvn"]
+
+[ext_resource type="Texture2D" uid="uid://nefsp7vyc5ok" path="res://art/fiber.png" id="1_ddrat"]
+[ext_resource type="Script" uid="uid://byhixqi3mxvf2" path="res://scripts/resources/ItemData.gd" id="2_ug61q"]
+
+[resource]
+script = ExtResource("2_ug61q")
+id = "item_fiber"
+display_name = "fiber"
+icon = ExtResource("1_ddrat")
+metadata/_custom_type_script = "uid://byhixqi3mxvf2"

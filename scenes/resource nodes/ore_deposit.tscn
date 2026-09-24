@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bs7v5u8iaxdhc"]
+
+[ext_resource type="Script" uid="uid://d31hd1loqu1s6" path="res://scripts/world/OreDeposit.gd" id="1_0061b"]
+[ext_resource type="Resource" uid="uid://lpl24a24nyep" path="res://resources/items/rock.tres" id="2_47i8t"]
+[ext_resource type="Texture2D" uid="uid://cwncu82icme68" path="res://art/rock.png" id="3_dhnx0"]
+[ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="4_gwcio"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0h2qt"]
+radius = 58.077534
+
+[node name="OreDeposit" type="StaticBody2D" unique_id=1684612299]
+script = ExtResource("1_0061b")
+yield_item = ExtResource("2_47i8t")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1217245169]
+position = Vector2(0, -3)
+texture = ExtResource("3_dhnx0")
+
+[node name="Interactable" type="Area2D" parent="." unique_id=2059368765]
+script = ExtResource("4_gwcio")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable" unique_id=958918049]
+shape = SubResource("CircleShape2D_0h2qt")

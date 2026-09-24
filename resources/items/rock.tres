@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://lpl24a24nyep"]
+
+[ext_resource type="Texture2D" uid="uid://db8qi3qdhv3hl" path="res://art/rock_resource.png" id="1_812tc"]
+[ext_resource type="Script" uid="uid://byhixqi3mxvf2" path="res://scripts/resources/ItemData.gd" id="2_03xi4"]
+
+[resource]
+script = ExtResource("2_03xi4")
+id = "rock"
+display_name = "rock"
+icon = ExtResource("1_812tc")
+metadata/_custom_type_script = "uid://byhixqi3mxvf2"
