@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://b57brptpmh0kw"]
+
+[ext_resource type="Script" uid="uid://1bdfx7rmd7r3" path="res://scripts/characters/Villager.gd" id="1_dy3ij"]
+[ext_resource type="Texture2D" uid="uid://dvhw8dgnryvd8" path="res://art/player.png" id="2_8iwvj"]
+[ext_resource type="Script" uid="uid://136xao86b6ub" path="res://scripts/systems/Inventory.gd" id="3_mkfib"]
+[ext_resource type="Script" uid="uid://c0us6i6h7kyaj" path="res://scripts/systems/EquipmentSlots.gd" id="4_teuop"]
+[ext_resource type="Script" uid="uid://cn6b5dp787u0v" path="res://scripts/components/HealthComponent.gd" id="5_spfcp"]
+[ext_resource type="Script" uid="uid://b4b3hdleeq2q8" path="res://scripts/components/NeedComponent.gd" id="6_2kjc5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6eyey"]
+radius = 12.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d3wef"]
+size = Vector2(50, 50)
+
+[node name="Villager" type="CharacterBody2D" unique_id=216167271]
+script = ExtResource("1_dy3ij")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=266097303]
+position = Vector2(4.7683716e-07, -4.7683716e-07)
+scale = Vector2(0.36282465, 0.36282465)
+texture = ExtResource("2_8iwvj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=137771709]
+shape = SubResource("CircleShape2D_6eyey")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=53953957]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=718081485]
+shape = SubResource("RectangleShape2D_d3wef")
+
+[node name="Inventory" type="Node" parent="." unique_id=13585132]
+script = ExtResource("3_mkfib")
+
+[node name="EquipmentSlots" type="Node" parent="." unique_id=1684089407]
+script = ExtResource("4_teuop")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=894181431]
+script = ExtResource("5_spfcp")
+
+[node name="HungerNeed" type="Node" parent="." unique_id=349250206]
+script = ExtResource("6_2kjc5")

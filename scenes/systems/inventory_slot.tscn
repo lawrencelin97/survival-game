@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" uid="uid://0ar458rt24m8" path="res://scripts/systems/InventorySlot.gd" id="1_a131h"]
 
-[node name="InventorySlot" type="Panel" unique_id=1310757559]
+[node name="InventorySlot" type="Button" unique_id=1927816724]
+offset_right = 8.0
+offset_bottom = 8.0
 script = ExtResource("1_a131h")
 
 [node name="Icon" type="TextureRect" parent="." unique_id=1230011435]

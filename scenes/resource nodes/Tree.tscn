@@ -18,6 +18,8 @@ drop_item = ExtResource("2_1gtcl")
 drop_amount_min = 8
 drop_amount_max = 10
 pickup_scene = ExtResource("3_2i8fu")
+harvest_tag = "wood"
+requires_tool = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1313693617]
 position = Vector2(0, -12.000002)

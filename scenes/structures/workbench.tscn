@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://8udcnx3alflv" path="res://art/workbench.png" id="2_qrwcf"]
 [ext_resource type="Resource" uid="uid://bflws6viwltor" path="res://resources/recipes/recipe_fiber.tres" id="3_ducwp"]
 [ext_resource type="Resource" uid="uid://bvmupcdkfuwxy" path="res://resources/recipes/recipe_rope.tres" id="4_sp8bk"]
+[ext_resource type="Resource" uid="uid://d1fgckcgqt1x2" path="res://resources/recipes/recipe_axe.tres" id="5_21ktt"]
 [ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="5_ducwp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m0qn0"]
@@ -16,7 +17,7 @@ size = Vector2(64, 62)
 [node name="Workbench" type="StaticBody2D" unique_id=927509143]
 script = ExtResource("1_0u6fm")
 station_name = "workbench"
-available_recipes = Array[ExtResource("2_m0qn0")]([ExtResource("3_ducwp"), ExtResource("4_sp8bk")])
+available_recipes = Array[ExtResource("2_m0qn0")]([ExtResource("3_ducwp"), ExtResource("4_sp8bk"), ExtResource("5_21ktt")])
 footprint = Vector2i(2, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=210917259]

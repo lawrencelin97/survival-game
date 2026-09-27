@@ -1,23 +1,24 @@
-extends Panel
+extends Button
 class_name InventorySlot
-# Scene structure:
-# InventorySlot (Panel, this script)
-#  ├─ Icon (TextureRect, centered, expand mode "Keep Aspect Centered")
-#  └─ AmountLabel (Label, bottom-right anchored)
-#
-# WHY this is its own tiny scene rather than InventoryUI drawing squares
-# directly in code: GridContainer just arranges child *nodes* — it doesn't
-# care what they are. Making each slot a real scene means you can visually
-# tweak slot styling (borders, hover highlight, drag-and-drop later) in the
-# editor instead of hand-writing style boxes in GDScript.
+# Changed from a display-only Panel to a Button: clicking a slot holding an
+# equip-able item (tool/weapon/armor/clothing) now equips it — see
+# InventoryUI._on_inventory_slot_pressed(). Non-equip-able items (raw
+# resources, building materials) just do nothing on click for now.
 
-@onready var icon: TextureRect = $Icon
-@onready var amount_label: Label = $AmountLabel
+signal slot_pressed(item: ItemData)
 
-func set_slot_data(item: ItemData, amount: int) -> void:
+var item: ItemData = null
+var amount := 0
+
+func _ready() -> void:
+	pressed.connect(func(): if item: slot_pressed.emit(item))
+
+func set_slot_data(new_item: ItemData, new_amount: int) -> void:
+	item = new_item
+	amount = new_amount
 	if item == null or amount <= 0:
-		icon.texture = null
-		amount_label.text = ""
+		icon = null
+		text = ""
 		return
-	icon.texture = item.icon
-	amount_label.text = str(amount) if amount > 1 else ""
+	icon = item.icon
+	text = str(amount) if amount > 1 else ""

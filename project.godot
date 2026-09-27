@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GridManager="*uid://djmg4p4nq1jhj"
 RoomManager="*uid://bhlnmj26rgtj6"
+JobManager="*uid://b3edpk7vugs4c"
 
 [input]
 

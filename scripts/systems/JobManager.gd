@@ -1,0 +1,59 @@
+extends Node
+# Autoload as "JobManager"
+#
+# A flat pool of available work, not assigned to anyone until a Villager
+# requests one. WHY a pool instead of each job source (e.g. ResourceNode)
+# tracking its own "am I claimed" flag: keeping claim state in one place
+# means a villager that gets interrupted mid-job (or can't make progress —
+# see Villager's stuck-detection) doesn't leave that job stuck claimed
+# forever. JobManager just puts it back in the pool for someone else.
+#
+# WHY jobs currently come only from ResourceNode registering itself: this
+# is the simplest source of real work that gets villagers doing something
+# end to end. A proper RimWorld-style player-designation system ("mark
+# this specific tree for chopping") would sit in front of this later — it
+# would just call add_job() the same way ResourceNode does now, instead of
+# every resource node being auto-available the moment it exists.
+
+signal jobs_changed
+
+var _available_jobs: Array[Job] = []
+var _claimed_jobs: Array[Job] = []
+
+func add_job(job: Job) -> void:
+	_available_jobs.append(job)
+	jobs_changed.emit()
+
+func remove_job(job: Job) -> void:
+	_available_jobs.erase(job)
+	_claimed_jobs.erase(job)
+	jobs_changed.emit()
+
+# Called by an idle Villager. Returns the closest valid job to its current
+# position, or null if there's no work available right now.
+func request_job(from_position: Vector2) -> Job:
+	var best: Job = null
+	var best_dist := INF
+	for job in _available_jobs:
+		if not job.is_valid():
+			continue
+		var dist := from_position.distance_squared_to(job.target_position)
+		if dist < best_dist:
+			best_dist = dist
+			best = job
+
+	if best:
+		_available_jobs.erase(best)
+		_claimed_jobs.append(best)
+		jobs_changed.emit()
+	return best
+
+# Called by a Villager that couldn't finish a job (interrupted, or no
+# progress being made — e.g. it doesn't have the tool the job needs).
+# Makes the job available again for a different villager to try.
+func release_job(job: Job) -> void:
+	if _claimed_jobs.has(job):
+		_claimed_jobs.erase(job)
+		if job.is_valid():
+			_available_jobs.append(job)
+		jobs_changed.emit()

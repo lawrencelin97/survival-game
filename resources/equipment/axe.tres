@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://5k6lkp0uquva"]
+
+[ext_resource type="Texture2D" uid="uid://cinhjbwiu1gnu" path="res://art/axe.png" id="1_6nbqe"]
+[ext_resource type="Script" uid="uid://dn7d56w22n3ds" path="res://scripts/resources/ToolData.gd" id="1_tevpv"]
+
+[resource]
+script = ExtResource("1_tevpv")
+harvest_tag = "wood"
+id = "tool_axe_t1"
+display_name = "axe"
+icon = ExtResource("1_6nbqe")
+category = 1
+max_stack = 1
+metadata/_custom_type_script = "uid://dn7d56w22n3ds"

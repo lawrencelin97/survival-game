@@ -1,12 +1,18 @@
-extends CharacterBody2D
+extends Character
 class_name Player
+# Player-specific: keyboard/mouse input, and the UI systems only the human
+# player needs (inventory screen, build menu, crafting menu). Everything
+# about carrying items, equipping tools, taking damage, moving toward a
+# point, and interacting with things comes from Character.
+#
 # Scene structure expected (build this in the Godot editor):
-# Player (CharacterBody2D, this script)
+# Player (CharacterBody2D, Character + this script)
 #  ├─ Sprite2D / AnimatedSprite2D
 #  ├─ CollisionShape2D
 #  ├─ InteractionArea (Area2D, larger radius than the body collider)
 #  │    └─ CollisionShape2D
 #  ├─ Inventory (Node, Inventory.gd)
+#  ├─ EquipmentSlots (Node, EquipmentSlots.gd)
 #  ├─ HealthComponent (Node, HealthComponent.gd)
 #  ├─ HungerNeed (Node, NeedComponent.gd — set need_name = "hunger")
 #  ├─ PlacementManager (Node2D, PlacementManager.gd)
@@ -17,11 +23,6 @@ class_name Player
 #  └─ CraftingUILayer (CanvasLayer)
 #       └─ CraftingUI (Control, CraftingUI.gd — full rect, starts hidden)
 
-@export var speed := 120.0
-
-@onready var interaction_area: Area2D = $InteractionArea
-@onready var inventory: Inventory = $Inventory
-@onready var health: HealthComponent = $HealthComponent
 @onready var hunger: NeedComponent = $HungerNeed
 @onready var placement: PlacementManager = $PlacementManager
 @onready var inventory_ui: InventoryUI = $InventoryUILayer/InventoryUI
@@ -34,7 +35,7 @@ func _ready() -> void:
 	# Inventory/PlacementManager reusable for non-player entities later.
 	placement.inventory = inventory
 	hunger.depleted.connect(_on_hunger_depleted)
-	inventory_ui.open_for(inventory)
+	inventory_ui.open_for(inventory, equipment)
 	build_menu_ui.set_context(placement, inventory)
 
 func _physics_process(_delta: float) -> void:
@@ -60,16 +61,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		inventory_ui.toggle()
 
 func _try_interact() -> void:
-	var nearest: Interactable = null
-	var nearest_dist := INF
-	for area in interaction_area.get_overlapping_areas():
-		if area is Interactable:
-			var dist := global_position.distance_squared_to(area.global_position)
-			if dist < nearest_dist:
-				nearest_dist = dist
-				nearest = area
+	var nearest := find_nearest_interactable()
 	if nearest:
-		nearest.interact(self)
+		interact_with(nearest)
 
 # Called by CraftingStation._on_interacted() when the player interacts
 # with any crafting bench.

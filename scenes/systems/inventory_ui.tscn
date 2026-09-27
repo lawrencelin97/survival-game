@@ -2,20 +2,32 @@
 
 [ext_resource type="Script" uid="uid://2r75btl74b62" path="res://scripts/systems/InventoryUI.gd" id="1_8nj0w"]
 [ext_resource type="PackedScene" uid="uid://c08qy5ulpi0io" path="res://scenes/systems/inventory_slot.tscn" id="2_niqeu"]
+[ext_resource type="PackedScene" uid="uid://dtb07whg6uyjs" path="res://scenes/systems/equipment_slot_button.tscn" id="3_niqeu"]
 
-[node name="InventoryUi" type="Control" unique_id=1991036544]
+[node name="InventoryUi" type="Control" unique_id=373126146]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_8nj0w")
-slot_scene = ExtResource("2_niqeu")
+inventory_slot_scene = ExtResource("2_niqeu")
+equipment_slot_scene = ExtResource("3_niqeu")
 
 [node name="Panel" type="Panel" parent="." unique_id=833017917]
 layout_mode = 0
-offset_right = 352.0
-offset_bottom = 212.0
+offset_right = 370.0
+offset_bottom = 225.0
 
-[node name="GridContainer" type="GridContainer" parent="Panel" unique_id=872059237]
+[node name="InventoryGrid" type="GridContainer" parent="Panel" unique_id=872059237]
 layout_mode = 0
-offset_right = 352.0
+offset_left = 5.0
+offset_top = 8.0
+offset_right = 174.0
 offset_bottom = 213.0
 columns = 5
+
+[node name="EquipmentGrid" type="GridContainer" parent="Panel" unique_id=775757412]
+layout_mode = 0
+offset_left = 207.0
+offset_top = 12.0
+offset_right = 355.0
+offset_bottom = 209.0
+columns = 4

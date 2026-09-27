@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://d1fgckcgqt1x2"]
+
+[ext_resource type="Script" uid="uid://breg5tyhcvbgp" path="res://scripts/resources/ItemStack.gd" id="1_uetjk"]
+[ext_resource type="Resource" uid="uid://bibqtuk4v5wbr" path="res://resources/items/rope.tres" id="3_8ncmq"]
+[ext_resource type="Resource" uid="uid://comhmhco42syj" path="res://resources/items/wood_stick.tres" id="3_tcmc0"]
+[ext_resource type="Resource" uid="uid://lpl24a24nyep" path="res://resources/items/rock.tres" id="4_5lofr"]
+[ext_resource type="Script" uid="uid://br8w0bw3p8cjm" path="res://scripts/resources/RecipeData.gd" id="4_tcmc0"]
+[ext_resource type="Resource" uid="uid://5k6lkp0uquva" path="res://resources/equipment/axe.tres" id="5_wlqrk"]
+
+[sub_resource type="Resource" id="Resource_ujjdf"]
+script = ExtResource("1_uetjk")
+item = ExtResource("3_8ncmq")
+metadata/_custom_type_script = "uid://breg5tyhcvbgp"
+
+[sub_resource type="Resource" id="Resource_es6cs"]
+script = ExtResource("1_uetjk")
+item = ExtResource("3_tcmc0")
+amount = 2
+metadata/_custom_type_script = "uid://breg5tyhcvbgp"
+
+[sub_resource type="Resource" id="Resource_m1n8p"]
+script = ExtResource("1_uetjk")
+item = ExtResource("4_5lofr")
+amount = 2
+metadata/_custom_type_script = "uid://breg5tyhcvbgp"
+
+[sub_resource type="Resource" id="Resource_3wpyw"]
+script = ExtResource("1_uetjk")
+item = ExtResource("5_wlqrk")
+metadata/_custom_type_script = "uid://breg5tyhcvbgp"
+
+[resource]
+script = ExtResource("4_tcmc0")
+id = "recipe_rope"
+output = SubResource("Resource_3wpyw")
+ingredients = Array[ExtResource("1_uetjk")]([SubResource("Resource_ujjdf"), SubResource("Resource_es6cs"), SubResource("Resource_m1n8p")])
+metadata/_custom_type_script = "uid://br8w0bw3p8cjm"

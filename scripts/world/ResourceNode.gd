@@ -7,11 +7,14 @@ class_name ResourceNode
 #  ├─ Interactable (Area2D, Interactable.gd — separate, larger hit area)
 #  └─ HealthComponent (Node, HealthComponent.gd — max_health = hits to deplete)
 #
-# One script covers both behaviors you want:
-#  - Trees/rocks: drop_directly_to_inventory = false, pickup_scene assigned
-#    -> spawns a WorldItemPickup on the ground when depleted.
-#  - Crops: drop_directly_to_inventory = true
-#    -> goes straight into the harvesting player's Inventory, no pickup_scene needed.
+# One script covers three behaviors:
+#  - Trees: drop_directly_to_inventory = false, pickup_scene assigned,
+#    harvest_tag = "wood", requires_tool = true
+#    -> can't be damaged at all without a ToolData tagged "wood" (an axe) equipped.
+#  - Rocks: harvest_tag = "stone", requires_tool = false, tool_yield_bonus = 2.0
+#    -> harvestable by hand, but yields more with a ToolData tagged "stone" (a pickaxe) equipped.
+#  - Crops: drop_directly_to_inventory = true, harvest_tag left empty
+#    -> goes straight into the harvesting player's Inventory, no tool involved.
 
 @export var drop_item: ItemData
 @export var drop_amount_min := 1
@@ -20,30 +23,44 @@ class_name ResourceNode
 @export var drop_directly_to_inventory := false
 @export var pickup_scene: PackedScene  # required when drop_directly_to_inventory is false
 
+@export var harvest_tag := ""  # e.g. "wood", "stone" — matches a ToolData's harvest_tag; empty means no tool interacts with this
+@export var requires_tool := false  # true = can't be damaged at all without a matching tool equipped (e.g. trees need an axe)
+@export var tool_yield_bonus := 1.0  # multiplier on drop amount when the equipped tool's tag matches (independent of requires_tool)
+
 @onready var interactable: Interactable = $Interactable
 @onready var health: HealthComponent = $HealthComponent
 
 var _last_interactor: Node
+var _job: Job
 
 func _ready() -> void:
 	interactable.interacted.connect(_on_interacted)
 	health.died.connect(_on_depleted)
-	# Register this node's own cell as occupied, regardless of whether it was
-	# hand-placed in the editor or spawned by a generator — that way anything
-	# checking GridManager (building placement, another spawn attempt) sees
-	# an accurate picture without the spawner having to remember to do this.
 	GridManager.occupy(GridManager.world_to_grid(global_position), self)
+	_job = Job.new(self, global_position)
+	JobManager.add_job(_job)
 
 func _exit_tree() -> void:
 	GridManager.free_cell(GridManager.world_to_grid(global_position))
+	JobManager.remove_job(_job)
 
 func _on_interacted(interactor: Node) -> void:
+	if requires_tool and not _has_matching_tool(interactor):
+		return  # e.g. no axe equipped — can't even start damaging a tree
 	_last_interactor = interactor
 	health.take_damage(damage_per_hit)
+
+func _has_matching_tool(interactor: Node) -> bool:
+	if harvest_tag == "" or not interactor.has_node("EquipmentSlots"):
+		return false
+	var equipment: EquipmentSlots = interactor.get_node("EquipmentSlots")
+	return equipment.has_tool_with_tag(harvest_tag)
 
 func _on_depleted() -> void:
 	if drop_item:
 		var amount := randi_range(drop_amount_min, drop_amount_max)
+		if _last_interactor and _has_matching_tool(_last_interactor):
+			amount = int(round(amount * tool_yield_bonus))
 		if drop_directly_to_inventory:
 			_give_to_interactor(drop_item, amount)
 		else:

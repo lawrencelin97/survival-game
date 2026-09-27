@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://3x3o4nrwvcjm"]
+
+[ext_resource type="Texture2D" uid="uid://bpir4cs3oldpu" path="res://art/pickaxe.png" id="1_q4njc"]
+[ext_resource type="Script" uid="uid://dn7d56w22n3ds" path="res://scripts/resources/ToolData.gd" id="2_sgwu5"]
+
+[resource]
+script = ExtResource("2_sgwu5")
+harvest_tag = "rock"
+id = "tool_pickaxe_t1"
+display_name = "pickaxe"
+icon = ExtResource("1_q4njc")
+category = 1
+max_stack = 1
+metadata/_custom_type_script = "uid://dn7d56w22n3ds"

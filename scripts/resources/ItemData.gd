@@ -8,7 +8,11 @@ class_name ItemData
 # (RecipeData, BuildingData) can reference them directly instead of storing
 # fragile string IDs everywhere.
 
-enum Category { RAW_RESOURCE, TOOL, BUILDING_MATERIAL, CONSUMABLE, MISC }
+enum Category { RAW_RESOURCE, TOOL, BUILDING_MATERIAL, CONSUMABLE, MISC, WEAPON, ARMOR, CLOTHING }
+# WEAPON/ARMOR/CLOTHING are appended at the end, not inserted after TOOL —
+# Godot saves an enum's value as a plain integer in .tres files, so
+# inserting them earlier would silently shift BUILDING_MATERIAL/CONSUMABLE/
+# MISC's saved values on every item resource that already exists.
 
 @export var id: String  # unique string key, e.g. "wood_log" — used for saving
 @export var display_name := "Item"
