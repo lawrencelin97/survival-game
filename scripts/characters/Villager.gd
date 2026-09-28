@@ -22,7 +22,7 @@ class_name Villager
 
 enum State { IDLE, MOVING_TO_JOB, WORKING }
 
-@export var interact_range := 24.0
+@export var interact_range := 40.0
 @export var stuck_attempts_before_giving_up := 3
 @export var think_interval := 0.5  # seconds between idle job-search attempts, so idle villagers aren't polling every frame
 

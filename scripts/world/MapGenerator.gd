@@ -34,8 +34,8 @@ func _ready() -> void:
 
 func generate() -> void:
 	_fill_ground()
-	_spawn_trees()
-	_spawn_shrubs()
+	#_spawn_trees()
+	#_spawn_shrubs()
 
 func _fill_ground() -> void:
 	if not tilemaplayer:

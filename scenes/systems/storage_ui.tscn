@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cq6c24400qkxd"]
+
+[ext_resource type="Script" uid="uid://j6ynayc07eq6" path="res://scripts/systems/StorageUI.gd" id="1_37ci8"]
+[ext_resource type="PackedScene" uid="uid://vuyb68l80vw6" path="res://scenes/systems/storage_slot.tscn" id="2_8bbd1"]
+
+[node name="StorageUi" type="Control" unique_id=579687432]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 407.0
+offset_bottom = 222.0
+script = ExtResource("1_37ci8")
+slot_scene = ExtResource("2_8bbd1")
+
+[node name="Panel" type="Panel" parent="." unique_id=612128121]
+layout_mode = 0
+offset_right = 410.0
+offset_bottom = 223.0
+
+[node name="TitleLabel" type="Label" parent="Panel" unique_id=1306296607]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="PlayerGrid" type="GridContainer" parent="Panel" unique_id=2018479194]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = 144.0
+offset_bottom = 153.0
+
+[node name="ChestGrid" type="GridContainer" parent="Panel" unique_id=767110704]
+layout_mode = 0
+offset_left = 246.0
+offset_top = 4.0
+offset_right = 401.0
+offset_bottom = 152.0

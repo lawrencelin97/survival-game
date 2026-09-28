@@ -3,18 +3,22 @@
 [ext_resource type="Script" uid="uid://0ar458rt24m8" path="res://scripts/systems/InventorySlot.gd" id="1_a131h"]
 
 [node name="InventorySlot" type="Button" unique_id=1927816724]
-offset_right = 8.0
-offset_bottom = 8.0
+offset_right = 54.0
+offset_bottom = 54.0
 script = ExtResource("1_a131h")
 
 [node name="Icon" type="TextureRect" parent="." unique_id=1230011435]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 6.0
+offset_top = 1.0
+offset_right = 49.0
+offset_bottom = 44.0
 
 [node name="AmountLabel" type="Label" parent="." unique_id=1946602455]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 7.0
+offset_top = 29.0
+offset_right = 48.0
+offset_bottom = 52.0
 horizontal_alignment = 2
 vertical_alignment = 2

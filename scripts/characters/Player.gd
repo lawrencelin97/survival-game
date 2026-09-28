@@ -1,18 +1,12 @@
-extends Character
+extends CharacterBody2D
 class_name Player
-# Player-specific: keyboard/mouse input, and the UI systems only the human
-# player needs (inventory screen, build menu, crafting menu). Everything
-# about carrying items, equipping tools, taking damage, moving toward a
-# point, and interacting with things comes from Character.
-#
 # Scene structure expected (build this in the Godot editor):
-# Player (CharacterBody2D, Character + this script)
+# Player (CharacterBody2D, this script)
 #  ├─ Sprite2D / AnimatedSprite2D
 #  ├─ CollisionShape2D
 #  ├─ InteractionArea (Area2D, larger radius than the body collider)
 #  │    └─ CollisionShape2D
 #  ├─ Inventory (Node, Inventory.gd)
-#  ├─ EquipmentSlots (Node, EquipmentSlots.gd)
 #  ├─ HealthComponent (Node, HealthComponent.gd)
 #  ├─ HungerNeed (Node, NeedComponent.gd — set need_name = "hunger")
 #  ├─ PlacementManager (Node2D, PlacementManager.gd)
@@ -20,14 +14,23 @@ class_name Player
 #  │    └─ InventoryUI (Control, InventoryUI.gd — full rect, starts hidden)
 #  ├─ BuildMenuUILayer (CanvasLayer)
 #  │    └─ BuildMenuUI (Control, BuildMenuUI.gd — full rect, starts hidden)
-#  └─ CraftingUILayer (CanvasLayer)
-#       └─ CraftingUI (Control, CraftingUI.gd — full rect, starts hidden)
+#  ├─ CraftingUILayer (CanvasLayer)
+#  │    └─ CraftingUI (Control, CraftingUI.gd — full rect, starts hidden)
+#  └─ StorageUILayer (CanvasLayer)
+#       └─ StorageUI (Control, StorageUI.gd — full rect, starts hidden)
 
+@export var speed := 120.0
+
+@onready var interaction_area: Area2D = $InteractionArea
+@onready var inventory: Inventory = $Inventory
+@onready var equipment: EquipmentSlots = $EquipmentSlots
+@onready var health: HealthComponent = $HealthComponent
 @onready var hunger: NeedComponent = $HungerNeed
 @onready var placement: PlacementManager = $PlacementManager
 @onready var inventory_ui: InventoryUI = $InventoryUILayer/InventoryUI
 @onready var build_menu_ui: BuildMenuUI = $BuildMenuUILayer/BuildMenuUI
 @onready var crafting_ui: CraftingUI = $CraftingUILayer/CraftingUI
+@onready var storage_ui: StorageUI = $StorageUILayer/StorageUI
 
 func _ready() -> void:
 	# Wire the systems that need each other's references. Doing this here
@@ -35,7 +38,7 @@ func _ready() -> void:
 	# Inventory/PlacementManager reusable for non-player entities later.
 	placement.inventory = inventory
 	hunger.depleted.connect(_on_hunger_depleted)
-	inventory_ui.open_for(inventory, equipment)
+	inventory_ui.open_for(inventory,equipment)
 	build_menu_ui.set_context(placement, inventory)
 
 func _physics_process(_delta: float) -> void:
@@ -51,6 +54,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			placement.confirm_placement()
 		else:
 			placement.confirm_demolish()
+	elif event.is_action_pressed("place_cancel") and storage_ui.visible:
+		storage_ui.close()
 	elif event.is_action_pressed("place_cancel") and crafting_ui.visible:
 		crafting_ui.close()
 	elif event.is_action_pressed("place_cancel") and build_menu_ui.visible:
@@ -61,14 +66,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		inventory_ui.toggle()
 
 func _try_interact() -> void:
-	var nearest := find_nearest_interactable()
+	var nearest: Interactable = null
+	var nearest_dist := INF
+	for area in interaction_area.get_overlapping_areas():
+		if area is Interactable:
+			var dist := global_position.distance_squared_to(area.global_position)
+			if dist < nearest_dist:
+				nearest_dist = dist
+				nearest = area
 	if nearest:
-		interact_with(nearest)
+		nearest.interact(self)
 
 # Called by CraftingStation._on_interacted() when the player interacts
 # with any crafting bench.
 func open_crafting_menu(station: CraftingStation) -> void:
 	crafting_ui.open_for(station, inventory)
+
+# Called by StorageChest._on_interacted() when the player interacts with a chest.
+func open_storage_menu(chest: StorageChest) -> void:
+	storage_ui.open_for(chest, inventory)
 
 func _on_hunger_depleted() -> void:
 	# Placeholder for RimWorld-style "starving" consequences. For now, just

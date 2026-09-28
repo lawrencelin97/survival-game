@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dlfo0riu2suhu"]
+
+[ext_resource type="Script" uid="uid://3tvsys7lbpnd" path="res://scripts/structures/StorageChest.gd" id="1_07byx"]
+[ext_resource type="Texture2D" uid="uid://dhkco4lev5qrr" path="res://art/chest.png" id="2_vqpo7"]
+[ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="3_nnqi6"]
+[ext_resource type="Script" uid="uid://136xao86b6ub" path="res://scripts/systems/Inventory.gd" id="4_xgxqy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rvvs6"]
+size = Vector2(30, 30)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qy4dq"]
+radius = 37.054016
+
+[node name="StorageChest" type="StaticBody2D" unique_id=224490747]
+script = ExtResource("1_07byx")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=445745748]
+texture = ExtResource("2_vqpo7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1344249941]
+shape = SubResource("RectangleShape2D_rvvs6")
+
+[node name="Interactable" type="Area2D" parent="." unique_id=1502669884]
+script = ExtResource("3_nnqi6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable" unique_id=2124045031]
+shape = SubResource("CircleShape2D_qy4dq")
+
+[node name="Inventory" type="Node" parent="." unique_id=1371031000]
+script = ExtResource("4_xgxqy")
+slot_count = 30

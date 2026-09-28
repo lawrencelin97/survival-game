@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://0sn6hraedtk7" path="res://resources/structures/door_t1.tres" id="5_ihckq"]
 [ext_resource type="Texture2D" uid="uid://c0mjnkrsfjd85" path="res://art/disassemble.png" id="6_7twb0"]
 [ext_resource type="Resource" uid="uid://u0ety1o7236b" path="res://resources/structures/workbench.tres" id="6_i8nfe"]
+[ext_resource type="Resource" uid="uid://bd7m6ii0duccs" path="res://resources/structures/storage_chest.tres" id="7_k8q5f"]
 
 [node name="BuildMenuUi" type="Control" unique_id=1779208186]
 layout_mode = 3
@@ -17,7 +18,7 @@ offset_right = 86.0
 offset_bottom = 594.0
 script = ExtResource("1_s0kr8")
 slot_scene = ExtResource("2_1ds4e")
-available_buildings = Array[ExtResource("3_yi5sy")]([ExtResource("4_ihckq"), ExtResource("5_ihckq"), ExtResource("6_i8nfe")])
+available_buildings = Array[ExtResource("3_yi5sy")]([ExtResource("4_ihckq"), ExtResource("5_ihckq"), ExtResource("6_i8nfe"), ExtResource("7_k8q5f")])
 
 [node name="Panel" type="Panel" parent="." unique_id=502670496]
 layout_mode = 0

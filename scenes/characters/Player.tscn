@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b0yjr5p743r61" path="res://scenes/systems/build_menu_ui.tscn" id="8_pn6s4"]
 [ext_resource type="PackedScene" uid="uid://ucfiwddnqwos" path="res://scenes/systems/inventory_ui.tscn" id="8_v42im"]
 [ext_resource type="PackedScene" uid="uid://2q1jvhdqck72" path="res://scenes/systems/crafting_ui.tscn" id="9_pn6s4"]
+[ext_resource type="PackedScene" uid="uid://cq6c24400qkxd" path="res://scenes/systems/storage_ui.tscn" id="11_ufbvs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6eyey"]
 radius = 12.0
@@ -61,3 +62,7 @@ script = ExtResource("5_bruh7")
 [node name="CraftingUILayer" type="CanvasLayer" parent="." unique_id=1180468184]
 
 [node name="CraftingUI" parent="CraftingUILayer" unique_id=448518439 instance=ExtResource("9_pn6s4")]
+
+[node name="StorageUILayer" type="CanvasLayer" parent="." unique_id=82646897]
+
+[node name="StorageUI" parent="StorageUILayer" unique_id=1151168517 instance=ExtResource("11_ufbvs")]

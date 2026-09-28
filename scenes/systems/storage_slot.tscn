@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://vuyb68l80vw6"]
+
+[ext_resource type="Script" uid="uid://du2vm15eyqass" path="res://scripts/systems/StorageSlot.gd" id="1_tsu4f"]
+
+[node name="StorageSlot" type="Button" unique_id=119576397]
+offset_right = 31.0
+offset_bottom = 31.0
+script = ExtResource("1_tsu4f")
