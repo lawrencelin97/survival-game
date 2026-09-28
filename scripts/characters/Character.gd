@@ -18,7 +18,7 @@ class_name Character
 #  ├─ EquipmentSlots (Node, EquipmentSlots.gd)
 #  └─ HealthComponent (Node, HealthComponent.gd)
 
-@export var speed := 100.0
+@export var speed := 120.0
 
 @onready var interaction_area: Area2D = $InteractionArea
 @onready var inventory: Inventory = $Inventory

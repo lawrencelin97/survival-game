@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends Character
 class_name Player
 # Scene structure expected (build this in the Godot editor):
 # Player (CharacterBody2D, this script)
@@ -19,12 +19,6 @@ class_name Player
 #  └─ StorageUILayer (CanvasLayer)
 #       └─ StorageUI (Control, StorageUI.gd — full rect, starts hidden)
 
-@export var speed := 120.0
-
-@onready var interaction_area: Area2D = $InteractionArea
-@onready var inventory: Inventory = $Inventory
-@onready var equipment: EquipmentSlots = $EquipmentSlots
-@onready var health: HealthComponent = $HealthComponent
 @onready var hunger: NeedComponent = $HungerNeed
 @onready var placement: PlacementManager = $PlacementManager
 @onready var inventory_ui: InventoryUI = $InventoryUILayer/InventoryUI
