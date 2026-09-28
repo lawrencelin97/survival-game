@@ -60,16 +60,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		inventory_ui.toggle()
 
 func _try_interact() -> void:
-	var nearest: Interactable = null
-	var nearest_dist := INF
-	for area in interaction_area.get_overlapping_areas():
-		if area is Interactable:
-			var dist := global_position.distance_squared_to(area.global_position)
-			if dist < nearest_dist:
-				nearest_dist = dist
-				nearest = area
-	if nearest:
-		nearest.interact(self)
+	find_nearest_interactable().interact(self)
 
 # Called by CraftingStation._on_interacted() when the player interacts
 # with any crafting bench.
