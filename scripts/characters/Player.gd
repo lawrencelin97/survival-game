@@ -7,6 +7,7 @@ class_name Player
 #  ├─ InteractionArea (Area2D, larger radius than the body collider)
 #  │    └─ CollisionShape2D
 #  ├─ Inventory (Node, Inventory.gd)
+#  ├─ EquipmentSlots (Node, EquipmentSlots.gd)
 #  ├─ HealthComponent (Node, HealthComponent.gd)
 #  ├─ HungerNeed (Node, NeedComponent.gd — set need_name = "hunger")
 #  ├─ PlacementManager (Node2D, PlacementManager.gd)
@@ -27,18 +28,31 @@ class_name Player
 @onready var storage_ui: StorageUI = $StorageUILayer/StorageUI
 
 func _ready() -> void:
-	# Wire the systems that need each other's references. Doing this here
-	# (rather than each system reaching out to find the player) keeps
-	# Inventory/PlacementManager reusable for non-player entities later.
 	placement.inventory = inventory
 	hunger.depleted.connect(_on_hunger_depleted)
-	inventory_ui.open_for(inventory,equipment)
+	inventory_ui.open_for(inventory, equipment)
 	build_menu_ui.set_context(placement, inventory)
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_dir * speed
 	move_and_slide()
+
+	# Single presses (handled below via _try_interact) deliver resources to
+	# a ConstructionSite. Holding interact is a different mechanism
+	# entirely — checked every physics frame here rather than waiting for a
+	# press event — and only does something once a site is already fully
+	# resourced, applying this character's work_rate toward its work_cost.
+	if Input.is_action_pressed("interact"):
+		_try_apply_work(delta)
+
+func _try_apply_work(delta: float) -> void:
+	var nearest := find_nearest_interactable()
+	if nearest == null:
+		return
+	var site := nearest.get_parent()
+	if site is ConstructionSite and site.is_resourced():
+		site.apply_work(work_rate * delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
@@ -60,20 +74,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		inventory_ui.toggle()
 
 func _try_interact() -> void:
-	find_nearest_interactable().interact(self)
+	var nearest := find_nearest_interactable()
+	if nearest:
+		interact_with(nearest)
 
-# Called by CraftingStation._on_interacted() when the player interacts
-# with any crafting bench.
 func open_crafting_menu(station: CraftingStation) -> void:
 	crafting_ui.open_for(station, inventory)
 
-# Called by StorageChest._on_interacted() when the player interacts with a chest.
 func open_storage_menu(chest: StorageChest) -> void:
 	storage_ui.open_for(chest, inventory)
 
 func _on_hunger_depleted() -> void:
-	# Placeholder for RimWorld-style "starving" consequences. For now, just
-	# chip away at health while starving — replace with whatever you want.
 	health.take_damage(1.0)
 
 # Required input actions (Project Settings > Input Map):

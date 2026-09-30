@@ -7,14 +7,11 @@ class_name BuildMenuUI
 #       └─ GridContainer (Columns = 5, same layout idea as InventoryUI)
 #            (BuildOptionSlot instances added here at runtime)
 #
-# WHY affordability checks live here instead of in PlacementManager:
-# PlacementManager already checks cost when validating ghost placement
-# every frame — that's the authoritative check. This is a second, cheaper
-# check purely for greying out menu buttons so the player can see what
-# they can afford before even entering placement mode. Duplicating the
-# read-only check is fine; the two never need to agree on anything more
-# than "can I afford this", and PlacementManager remains the only place
-# that actually spends resources.
+# WHY there's no affordability greying anymore: resources are no longer
+# paid at placement time (see PlacementManager/ConstructionSite) — a
+# blueprint can be placed with nothing in inventory and resourced later.
+# Every listed building is always selectable; whether you can finish it is
+# entirely a ConstructionSite concern now, not a build-menu one.
 
 @export var slot_scene: PackedScene  # BuildOptionSlot.tscn
 @export var available_buildings: Array[BuildingData] = []
@@ -42,33 +39,18 @@ func _build_slots() -> void:
 		slot.pressed.connect(_on_building_selected.bind(building))
 		_slot_nodes.append(slot)
 
-# Called once from Player._ready(), same idea as Inventory being wired into
-# PlacementManager — this menu needs both to check affordability and to
-# actually kick off placement.
 func set_context(target_placement: PlacementManager, target_inventory: Inventory) -> void:
 	placement = target_placement
 	inventory = target_inventory
-	if inventory and not inventory.inventory_changed.is_connected(_refresh_affordability):
-		inventory.inventory_changed.connect(_refresh_affordability)
-	_refresh_affordability()
 
 func toggle() -> void:
 	visible = not visible
-	if visible:
-		_refresh_affordability()
-	else:
+	if not visible:
 		close()
 
 func close() -> void:
 	visible = false
-	placement.cancel_all()  # stop whichever mode (placing or demolishing) was active
-
-func _refresh_affordability() -> void:
-	for i in available_buildings.size():
-		if i >= _slot_nodes.size():
-			break
-		var affordable := inventory == null or inventory.has_all(available_buildings[i].cost)
-		_slot_nodes[i].set_affordable(affordable)
+	placement.cancel_all()
 
 func _on_building_selected(building: BuildingData) -> void:
 	if placement == null:

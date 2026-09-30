@@ -30,6 +30,7 @@ class_name ResourceNode
 @onready var interactable: Interactable = $Interactable
 @onready var health: HealthComponent = $HealthComponent
 
+
 var _last_interactor: Node
 var _job: Job
 

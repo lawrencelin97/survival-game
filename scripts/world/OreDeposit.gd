@@ -22,8 +22,13 @@ class_name OreDeposit
 
 @onready var interactable: Interactable = $Interactable
 
+var _job: Job
+
 func _ready() -> void:
 	interactable.interacted.connect(_on_interacted)
+	GridManager.occupy(GridManager.world_to_grid(global_position), self)
+	_job = Job.new(self, global_position)
+	JobManager.add_job(_job)
 
 func _on_interacted(interactor: Node) -> void:
 	if not interactor.has_node("Inventory"):

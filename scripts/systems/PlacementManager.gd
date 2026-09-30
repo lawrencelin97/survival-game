@@ -1,19 +1,14 @@
 extends Node2D
 class_name PlacementManager
-# Attach as a child of the Player (or a sibling that follows the mouse —
-# your call). Drives the "ghost" preview that snaps to the grid, tints
-# red/green based on validity, and confirms placement into a real
-# PlacedBuilding on click. Also drives demolish mode — same grid/mouse
-# plumbing, opposite action: instead of adding a building, it removes
-# whatever occupies the hovered cell. No refund, no health/damage
-# involved — this is a direct "player chose to remove it" action, separate
-# from anything HealthComponent-based (e.g. future combat damage to walls).
+# Drives the mouse-following ghost preview (green/red, unchanged) and,
+# on confirm, spawns a ConstructionSite instead of the finished building —
+# see ConstructionSite.gd for the resource-delivery / work-to-build flow
+# that happens after this point. Also drives demolish mode.
 #
-# WHY grid-snapped logic lives here rather than on GridManager: GridManager
-# only knows "is this cell free" — it has no concept of an in-progress
-# placement, ghost sprites, or player-facing input. Keeping that here keeps
-# GridManager a pure data/query singleton, same separation you used between
-# SiteManager (data) and TacticalMap (UI/input) in the strategy game.
+# WHY there's no cost check here anymore: resources are no longer paid at
+# placement time — they're delivered to the ConstructionSite afterward, so
+# a blueprint can be placed with nothing in inventory. Validity is now
+# purely "is this cell free."
 
 signal placement_confirmed(building: BuildingData, top_left_cell: Vector2i)
 signal placement_cancelled
@@ -22,6 +17,7 @@ signal building_demolished(building: PlacedBuilding)
 @export var valid_color := Color(0, 1, 0, 0.5)
 @export var invalid_color := Color(1, 0, 0, 0.5)
 @export var demolish_highlight_color := Color(1, 0, 0, 0.4)
+@export var construction_site_scene: PackedScene  # ConstructionSite.tscn — one generic scene used for every building type
 
 var inventory: Inventory
 var _current_building: BuildingData
@@ -44,17 +40,15 @@ func is_active() -> bool:
 	return is_placing() or is_demolishing()
 
 func start_placement(building: BuildingData) -> void:
-	cancel_demolish()  # the two modes are mutually exclusive
+	cancel_demolish()
 	if _ghost != null:
 		cancel_placement()
 
 	_current_building = building
 	_ghost = building.scene.instantiate()
 	if _ghost is PlacedBuilding:
-		_ghost.is_ghost = true  # set before add_child so _ready() sees it and skips GridManager/RoomManager registration
+		_ghost.is_ghost = true
 	_ghost.modulate = valid_color
-	# Ghosts shouldn't collide or run gameplay logic — strip collision if
-	# your PlacedBuilding scenes have any StaticBody2D children.
 	_set_ghost_collision_enabled(_ghost, false)
 	add_child(_ghost)
 
@@ -66,7 +60,7 @@ func cancel_placement() -> void:
 	placement_cancelled.emit()
 
 func start_demolish() -> void:
-	if _ghost != null:  # the two modes are mutually exclusive
+	if _ghost != null:
 		cancel_placement()
 	_is_demolishing = true
 
@@ -75,8 +69,6 @@ func cancel_demolish() -> void:
 	_demolish_target = null
 	queue_redraw()
 
-# Convenience for callers (e.g. BuildMenuUI closing) that just want
-# "stop whatever mode is active" without checking which one it is.
 func cancel_all() -> void:
 	cancel_placement()
 	cancel_demolish()
@@ -94,9 +86,7 @@ func _process_placement() -> void:
 
 	_ghost.global_position = GridManager.grid_to_world(top_left_cell)
 
-	_is_valid = GridManager.are_cells_free(cells) and (
-		inventory == null or inventory.has_all(_current_building.cost)
-	)
+	_is_valid = GridManager.are_cells_free(cells)
 	_ghost.modulate = valid_color if _is_valid else invalid_color
 
 func _process_demolish() -> void:
@@ -109,11 +99,7 @@ func _process_demolish() -> void:
 func _draw() -> void:
 	if not is_demolishing() or _demolish_target == null:
 		return
-	var top_left := GridManager.world_to_grid(_demolish_target.global_position)
-	var cells := GridManager.get_footprint_cells(top_left, _demolish_target.footprint)
-	for cell in cells:
-		# _draw() coordinates are local to this node, so convert from world
-		# space by subtracting this node's own global_position.
+	for cell in _demolish_target.get_occupied_cells():
 		var local_pos: Vector2 = GridManager.grid_to_world(cell) - global_position
 		var half := GridManager.CELL_SIZE / 2.0
 		draw_rect(Rect2(local_pos - Vector2(half, half), Vector2(GridManager.CELL_SIZE, GridManager.CELL_SIZE)), demolish_highlight_color)
@@ -126,16 +112,13 @@ func confirm_placement() -> bool:
 	var top_left_cell := GridManager.world_to_grid(mouse_world)
 	var cells := GridManager.get_footprint_cells(top_left_cell, _current_building.footprint)
 
-	if inventory:
-		inventory.remove_all(_current_building.cost)
-
-	var building_instance := _current_building.scene.instantiate()
-	building_instance.global_position = GridManager.grid_to_world(top_left_cell)
-	GridManager.occupy_multi(cells, building_instance)  # register BEFORE add_child, so RoomManager sees this wall during its own _ready()
-	get_tree().current_scene.add_child(building_instance)
+	var site := construction_site_scene.instantiate()
+	site.target_building = _current_building
+	site.global_position = GridManager.grid_to_world(top_left_cell)
+	GridManager.occupy_multi(cells, site)
+	get_tree().current_scene.add_child(site)
 
 	var placed := _current_building
-
 	placement_confirmed.emit(placed, top_left_cell)
 	return true
 
@@ -143,9 +126,6 @@ func confirm_demolish() -> bool:
 	if not is_demolishing() or _demolish_target == null:
 		return false
 	var target := _demolish_target
-	# queue_free() triggers PlacedBuilding._exit_tree(), which already
-	# handles freeing GridManager cells, unregistering wall cells, and
-	# triggering a RoomManager recalculation — no duplicate cleanup needed here.
 	target.queue_free()
 	_demolish_target = null
 	queue_redraw()

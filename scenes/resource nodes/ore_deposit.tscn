@@ -5,6 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://cwncu82icme68" path="res://art/rock.png" id="3_dhnx0"]
 [ext_resource type="Script" uid="uid://ynlrtwcqow46" path="res://scripts/components/Interactable.gd" id="4_gwcio"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_47i8t"]
+radius = 20.0
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_0h2qt"]
 radius = 58.077534
 
@@ -15,6 +18,9 @@ yield_item = ExtResource("2_47i8t")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1217245169]
 position = Vector2(0, -3)
 texture = ExtResource("3_dhnx0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1966960271]
+shape = SubResource("CircleShape2D_47i8t")
 
 [node name="Interactable" type="Area2D" parent="." unique_id=2059368765]
 script = ExtResource("4_gwcio")
