@@ -15,24 +15,21 @@ class_name ConstructionSite
 #    once-per-press system) deliver resources from the interactor's
 #    Inventory, as much of each missing ingredient as they're carrying.
 #  - Once every ingredient is fully delivered (is_resourced() == true),
-#    single presses stop doing anything — instead, HOLDING interact calls
-#    apply_work() every physics frame (see Player._physics_process, which
-#    checks Input.is_action_pressed continuously rather than waiting for
-#    a press event) until target_building.work_cost is met, at which point
-#    this swaps itself out for the real building.
+#    single presses stop doing anything — instead, HOLDING interact (a
+#    player) or a Villager's own construction-job loop calls apply_work()
+#    repeatedly until target_building.work_cost is met, at which point this
+#    swaps itself out for the real building.
 #
-# WHY this is a separate class from the real building rather than the real
-# building just starting "unfinished": the real building's own scene might
-# have interaction behavior (CraftingStation opens a menu, StorageChest
-# opens storage) that shouldn't be reachable before it actually exists.
-# Keeping construction entirely separate means the real building never has
-# to check "am I actually finished yet."
+# Also registers itself as a JobManager Job (Type.BUILD, higher priority
+# than harvesting) so villagers help build it — see can_be_worked_by() for
+# how a villager decides whether it's actually able to help right now.
 
 @export var target_building: BuildingData
 
 var delivered: Dictionary = {}  # ItemData -> amount delivered so far
 var work_progress := 0.0
 var _completing := false
+var _job: Job
 
 @onready var interactable: Interactable = $Interactable
 
@@ -45,13 +42,20 @@ func _ready() -> void:
 	shape.size = Vector2(footprint) * GridManager.CELL_SIZE
 	$CollisionShape2D.shape = shape
 	$CollisionShape2D.position = shape.size / 2.0  # global_position is the top-left tile; center the shape over the footprint
-	
-	JobManager.add_job(Job.new(self, global_position))
-	
+
 	if is_ghost:
 		return
 	interactable.interacted.connect(_on_interacted)
+	_job = Job.new(self, global_position, Job.Type.BUILD)
+	JobManager.add_job(_job)
 	queue_redraw()
+
+func _exit_tree() -> void:
+	if not is_ghost:
+		JobManager.remove_job(_job)
+	if _completing:
+		return  # cells were just handed off to the finished building, not actually vacated
+	super._exit_tree()
 
 func is_resourced() -> bool:
 	for stack in target_building.cost:
@@ -61,7 +65,7 @@ func is_resourced() -> bool:
 
 func _on_interacted(interactor: Node) -> void:
 	if is_resourced():
-		return  # nothing left to deliver — finishing it now happens by holding interact instead
+		return  # nothing left to deliver — finishing it now happens by applying work instead
 	if not interactor.has_node("Inventory"):
 		return
 	var inventory: Inventory = interactor.get_node("Inventory")
@@ -76,8 +80,9 @@ func _on_interacted(interactor: Node) -> void:
 			delivered[stack.item] = delivered.get(stack.item, 0) + to_deliver
 	queue_redraw()
 
-# Called every physics frame a character holds interact while this is the
-# nearest Interactable and is_resourced() is already true.
+# Called every physics frame a character is actively building this — a
+# held key for Player, or Villager's own construction-job handling — once
+# is_resourced() is already true.
 func apply_work(amount: float) -> bool:
 	if not is_resourced():
 		return false
@@ -88,19 +93,29 @@ func apply_work(amount: float) -> bool:
 		return true
 	return false
 
+# Used by Job.can_be_done_by() so a villager with nothing useful to deliver
+# skips this job for the next-best one instead of walking over and doing
+# nothing — this is the "check if they can do the job" behavior.
+func can_be_worked_by(character: Node) -> bool:
+	if is_resourced():
+		return true  # anyone can apply work once resourced
+	if not character.has_node("Inventory"):
+		return false
+	var inventory: Inventory = character.get_node("Inventory")
+	for stack in target_building.cost:
+		var still_needed: int = stack.amount - delivered.get(stack.item, 0)
+		if still_needed > 0 and inventory.count_item(stack.item) > 0:
+			return true  # carrying something this site still needs
+	return false
+
 func _complete_construction() -> void:
 	_completing = true
 	var cells := get_occupied_cells()
 	var real_building := target_building.scene.instantiate()
 	real_building.global_position = global_position
-	GridManager.occupy_multi(cells, real_building)  # hand these cells to the finished building before this site frees them
+	GridManager.occupy_multi(cells, real_building)
 	get_tree().current_scene.add_child(real_building)
 	queue_free()
-
-func _exit_tree() -> void:
-	if _completing:
-		return  # cells were just handed off above, not actually vacated
-	super._exit_tree()
 
 func _draw() -> void:
 	var size := Vector2(footprint) * GridManager.CELL_SIZE

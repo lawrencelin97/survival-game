@@ -41,9 +41,12 @@ func add_item(item: ItemData, amount: int) -> int:
 			slot.item = item
 			slot.amount = add
 			remaining -= add
-
+	
 	if remaining < amount:
 		inventory_changed.emit()
+	
+	print(slots)
+	
 	return remaining
 
 func has_item(item: ItemData, amount: int) -> bool:

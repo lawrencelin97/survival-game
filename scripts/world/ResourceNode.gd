@@ -30,7 +30,6 @@ class_name ResourceNode
 @onready var interactable: Interactable = $Interactable
 @onready var health: HealthComponent = $HealthComponent
 
-
 var _last_interactor: Node
 var _job: Job
 
@@ -38,7 +37,7 @@ func _ready() -> void:
 	interactable.interacted.connect(_on_interacted)
 	health.died.connect(_on_depleted)
 	GridManager.occupy(GridManager.world_to_grid(global_position), self)
-	_job = Job.new(self, global_position)
+	_job = Job.new(self, global_position, Job.Type.HARVEST)
 	JobManager.add_job(_job)
 
 func _exit_tree() -> void:
@@ -82,3 +81,11 @@ func _spawn_pickup(item: ItemData, amount: int) -> void:
 	pickup.amount = amount
 	get_tree().current_scene.add_child(pickup)
 	pickup.global_position = global_position + Vector2(randf_range(-8, 8), randf_range(-8, 8))
+
+# Used by Job.can_be_done_by() so a villager without the required tool
+# never claims this job in the first place, rather than getting stuck on
+# it after the fact.
+func can_be_worked_by(character: Node) -> bool:
+	if not requires_tool:
+		return true
+	return _has_matching_tool(character)
